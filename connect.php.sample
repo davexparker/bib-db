@@ -2,16 +2,16 @@
 
 // PHP code to connect to your Postgresql database.
 
-// You just need to change the 5 parameters at the start of the pg_connect function below.
+// You just need to change the 5 parameters at the start of the bib_connect_to_db() function below.
 // Should be obvious...
 
 function bib_connect_to_db()
 {
-	$host="dbhost";
-	$port="5432";
-	$user = "dxp";
-	$password = "???";
-	$dbname = "dxp";
+	$host="localhost"; // Database server. Leave as localhost if running on web server
+	$port="5432"; // Port for connection to database (5432 is Postgresql default)
+	$user = "dxp"; // User that owns the database
+	$password = "???"; //Password
+	$dbname = "dxp"; // Name of the database
 	
 	$dbconn = @pg_connect("host=$host port=$port user=$user password=$password dbname=$dbname");
 	
