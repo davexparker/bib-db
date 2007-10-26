@@ -661,13 +661,13 @@ function bib_display_item($item, $link = NULL, $indent = 0)
 	echo "<span class=\"bib-year\">".$item_hi["year"].".</span></span>\n";
 	// files
 	$item_files = bib_get_item_files($item);
-	if (count($item_files) > 0) {
+	//if (count($item_files) > 0) {
 		echo "$tabs<span class=\"bib-files\">\n";
 		foreach ($item_files as $item_file) {
 			echo "$tabs\t[<a href=\"".$item_file["url"]."\">".$item_file["ext"]."</a>]\n";
 		}
 		echo "$tabs</span>\n";
-	}
+	//}
 	
 	// print any extra links requested
 	if ($bib_list_item_extra_links) {
@@ -728,6 +728,10 @@ function bib_display_item_detailed($item, $link = NULL, $indent = 0)
 		if (array_key_exists("filename", $item)) if ($item["filename"]) {
 			if (array_key_exists("publisher", $item)) if (substr_count($item["publisher"], "Springer")) {
 			echo "<br><br><b>Note:</b> The original publication is available at <a href=\"http://www.springerlink.com/\">www.springerlink.com</a>\n";
+			}
+			if ((array_key_exists("series", $item) && (strcasecmp($item["series"], "Electronic Notes in Theoretical Computer Science") === 0 || strcasecmp($item["series"], "ENTCS") === 0))
+			    || (array_key_exists("journal", $item) && (strcasecmp($item["journal"], "Electronic Notes in Theoretical Computer Science") === 0 || strcasecmp($item["journal"], "ENTCS") === 0))) {
+			echo "<br><br><b>Note:</b> ENTCS is available at <a href=\"http://www.sciencedirect.com/science/journal/15710661\">www.sciencedirect.com/science/journal/15710661</a>\n";
 			}
 		}
 		echo "</div>";
