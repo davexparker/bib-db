@@ -725,14 +725,12 @@ function bib_display_item_detailed($item, $link = NULL, $indent = 0)
 			if (array_key_exists("filesize", $item_file)) if ($item_file["filesize"]) echo "(".$item_file["filesize"].") ";
 			echo "\n";
 		}
-		if (array_key_exists("filename", $item)) if ($item["filename"]) {
-			if (array_key_exists("publisher", $item)) if (substr_count($item["publisher"], "Springer")) {
-			echo "<br><br><b>Note:</b> The original publication is available at <a href=\"http://www.springerlink.com/\">www.springerlink.com</a>\n";
-			}
-			if ((array_key_exists("series", $item) && (strcasecmp($item["series"], "Electronic Notes in Theoretical Computer Science") === 0 || strcasecmp($item["series"], "ENTCS") === 0))
-			    || (array_key_exists("journal", $item) && (strcasecmp($item["journal"], "Electronic Notes in Theoretical Computer Science") === 0 || strcasecmp($item["journal"], "ENTCS") === 0))) {
-			echo "<br><br><b>Note:</b> ENTCS is available at <a href=\"http://www.sciencedirect.com/science/journal/15710661\">www.sciencedirect.com/science/journal/15710661</a>\n";
-			}
+		if (array_key_exists("publisher", $item)) if (substr_count($item["publisher"], "Springer")) {
+		echo "<br><br><b>Note:</b> The original publication is available at <a href=\"http://www.springerlink.com/\">www.springerlink.com</a>\n";
+		}
+		if ((array_key_exists("series", $item) && (strcasecmp($item["series"], "Electronic Notes in Theoretical Computer Science") === 0 || strcasecmp($item["series"], "ENTCS") === 0))
+		    || (array_key_exists("journal", $item) && (strcasecmp($item["journal"], "Electronic Notes in Theoretical Computer Science") === 0 || strcasecmp($item["journal"], "ENTCS") === 0))) {
+		echo "<br><br><b>Note:</b> ENTCS is available at <a href=\"http://www.sciencedirect.com/science/journal/15710661\">www.sciencedirect.com/science/journal/15710661</a>\n";
 		}
 		echo "</div>";
 	}
