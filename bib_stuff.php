@@ -20,7 +20,7 @@ $bib_month_names = array("0"=>"", "1"=>"January", "2"=>"February", "3"=>"March",
 $bib_item_fields = array("type", "address", "author", "booktitle", "chapter", "edition", "editor", "institution", "journal", "month", "note", "number", "organization", "pages", "publisher", "school", "series", "title", "type2", "volume", "year", "url", "filename", "abstract", "links");
 
 // Bibliography item types (à la bibtex)
-$bib_item_types = array("inproceedings","article","book","inbook","phdthesis","mastersthesis","techreport","unpublished");
+$bib_item_types = array("inproceedings","article","book","inbook","phdthesis","mastersthesis","techreport","unpublished","proceedings");
 
 // Storage for info about a bib item list
 $bib_list_item_link = "";
@@ -565,10 +565,10 @@ function bib_display_item($item, $link = NULL, $indent = 0)
 	echo "$tabs<span class=\"bib-key\">[".$item_hi["key"]."]</span>\n";
 	// author
 	echo "$tabs<span class=\"bib-auth\">";
-	if ($item_hi["author"] && $item_hi["author"])
+	if ($item_hi["author"])
 		echo $item_hi["author"].".";
-	if ($item["type"] == "book" && $item_hi["editor"]) {
-		if ($item_hi["author"] && $item_hi["author"]) echo " ";
+	if (($item["type"] == "book" || $item["type"] == "proceedings") && $item_hi["editor"]) {
+		if ($item_hi["author"]) echo " ";
 		echo $item_hi["editor"]." (editor";
 		if (strstr($item_hi["editor"], " and ")) echo "s";
 		echo ")";
@@ -611,6 +611,7 @@ function bib_display_item($item, $link = NULL, $indent = 0)
 		break;
 		
 	case "book":
+	case "proceedings":
 		if ($item_hi["volume"] && $item_hi["series"]) $src .= "Volume ".$item_hi["volume"]." of ".$item_hi["series"].". ";
 		if ($item_hi["publisher"]) $src .= $item_hi["publisher"];
 		if ($item_hi["note"]) $src .= ". ".$item_hi["note"];
