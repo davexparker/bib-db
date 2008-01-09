@@ -10,7 +10,7 @@ function bib_connect_to_db()
 	$host="localhost"; // Database server. Leave as localhost if running on web server
 	$port="5432"; // Port for connection to database (5432 is Postgresql default)
 	$user = "dxp"; // User that owns the database
-	$password = "???"; //Password
+	$password = "???"; // Password
 	$dbname = "dxp"; // Name of the database
 	
 	$dbconn = @pg_connect("host=$host port=$port user=$user password=$password dbname=$dbname");
