@@ -1,0 +1,46 @@
+.bib-bullet {
+	vertical-align: top;
+	width: 18px;
+	background-image: url(/~dxp/images/bullet.gif);
+	background-position: 3px 3px;
+	background-repeat: no-repeat;
+	border-bottom: solid 2px #ffffff;
+}
+
+.bib-block {
+	border: solid 2px #999999;
+	padding: 2px 2px 0px 2px;
+	background-color: #ffffff;
+}
+
+.bib-row-alt1 {
+	background-color: #dddddd;
+}
+.bib-row-alt2 {
+	background-color: #bbbbbb;
+}
+
+.bib-bullet {
+	display:none;
+}
+
+.bib-count {
+	text-align: center;
+	vertical-align: top;
+	padding: 3px;
+	border-bottom: solid 2px #ffffff;
+}
+
+.bib-item {
+	vertical-align: top;
+	padding: 3px;
+	border-bottom: solid 2px #ffffff;
+	border-left: solid 2px #ffffff;
+}
+
+.bib-key { display: block; font-weight: bold; }
+.bib-auth { display: block; }
+.bib-title { display: block; font-weight: bold; }
+.bib-src { display: block; }
+.bib-month { }
+.bib-year { }

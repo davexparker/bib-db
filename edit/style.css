@@ -1,0 +1,59 @@
+body,h1,h2,h3,h4,h5,p,ul,a,tr,td,b,i { font-family:Verdana,sans-serif; font-size:10pt; }
+body { font-size:10pt; }
+h1,h2 { font-size:16pt; }
+h3,h4 { font-size:12pt; }
+h5 { font-size:11pt; }
+pre { font-family:monospace; font-size:9pt; text-align:left }
+a:link { color:#0000ff; text-decoration:none }
+a:visited { color:#000099; text-decoration:none }
+a:hover { color:#0000ff; text-decoration:underline }
+a:active { color:#ff0000; text-decoration:none }
+
+td.spacer { line-height:0px }
+td.bg { background-color:#ffffff } 
+td.alt1 { background-color:#dddddd } 
+td.alt2 { background-color:#bbbbbb } 
+
+tr.biblist-row-alt1 {
+	background-color: #dddddd;
+}
+tr.biblist-row-alt2 {
+	background-color: #bbbbbb;
+}
+td.biblist-count {
+	text-align: center;
+	vertical-align: top;
+	padding: 3px;
+}
+td.biblist-item {
+	vertical-align: top;
+	padding: 3px;
+}
+
+.bibbox {
+	border:solid 2px #999999;
+	padding: 2px 2px 0px 2px;
+	background-color: #ffffff;
+}
+.bibbox tr.bibbox-row-alt1 {
+	background-color:#dddddd;
+}
+.bibbox tr.bibbox-row-alt2 {
+	background-color:#bbbbbb;
+}
+.bibbox td.bibbox-td {
+	padding:10px;
+	vertical-align:top;
+	border-bottom:solid 2px #ffffff;
+}
+
+.bib-key { font-weight:bold; }
+.bibbox .bib-key { display:none; } /* Don't show key on individual bib item pages */
+.bib-auth { }
+.bib-title { }
+.bib-src { }
+.bib-date { } /* date = month + year */
+.bib-month { }
+.bib-year { }
+.bib-files { display:none; }
+.bib-highlight { background-color:#ffff00; }

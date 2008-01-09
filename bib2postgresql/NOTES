@@ -1,0 +1,4 @@
+
+~/www/bib/bib2postgresql/bib2postgresql < HK98.bib
+
+cat HK98.bib KB98.bib | ~/www/bib/bib2postgresql/bib2postgresql

@@ -1,0 +1,16 @@
+#!/bin/sh
+
+B2P_DIR=/home/dxp/bib-db/bib2postgresql
+B2P_DBHOST=qav
+B2P_USER=dxp
+B2P_DB=dxp
+B2P_TABLE=bib_items
+
+#B2P_DIR=/home/staff/dxp/www/bib/bib2postgresql
+#B2P_DBHOST=localhost
+#B2P_USER=luser
+#B2P_DB=dxp
+#B2P_TABLE=bib_items
+
+java -classpath $B2P_DIR:$B2P_DIR/jars/postgresql-8.0-311.jdbc3.jar:$B2P_DIR/jars/javabib-bin.jar Bib2Postgresql \
+$B2P_DBHOST $B2P_USER $B2P_DB $B2P_TABLE "$@"

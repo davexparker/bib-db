@@ -1,0 +1,85 @@
+
+For installation instructions, see the file INSTALL.
+
+This file gives info on various other administrative tasks
+
+In general, it is assumed that your database is running on localhost
+and that the name of the database is equal to $USER.
+If not, you will have to make changes to the commands as appropriate.
+
+================
+Database backups
+================
+
+% Dump database:
+% (you will need to enter your database password several times)
+
+/bin/mv dump dump-bak
+touch dump
+pg_dump -h localhost -t bib_items -c --no-owner $USER >> dump
+pg_dump -h localhost -t bib_cats -c --no-owner $USER >> dump
+pg_dump -h localhost -t bib_types -c --no-owner $USER >> dump
+
+
+================================
+Restoring from a database backup
+================================
+
+% Restore database:
+psql -h localhost $USER < dump
+
+
+===================
+Database operations
+===================
+
+% For various tasks that can/must be done manually
+
+% Log in
+psql -h localhost $USER
+
+% List tables
+\dp
+
+% Table info
+\d bib_items
+
+% View table
+SELECT * FROM bib_items;
+
+% Add row
+INSERT INTO bib_items (key, type, title) values ('KNP66', 'article', 'Case studies');
+INSERT INTO bib_cats (name, cat_group, description) values ('realtime', 'project', 'Real-time Project Publications');
+
+% Delete row
+DELETE FROM bib_items WHERE key = 'Par66';
+
+% Rename key
+UPDATE bib_items SET key='Meh04' WHERE key='Meh05';
+
+% Add column
+ALTER TABLE bib_items ADD COLUMN new_column TEXT;
+
+================
+Database queries
+================
+
+SELECT key FROM bib_items WHERE (position('|prism|' in cats)>0 AND (filename IS NULL OR char_length(filename)=0));
+SELECT key FROM bib_items WHERE (position('parker' in lower(author))>0 AND position('|dave|' in cats)=0);
+SELECT key FROM bib_items WHERE (position('norman' in lower(author))>0 AND position('|gethin|' in cats)=0);
+SELECT key FROM bib_items WHERE (position('kwiat' in lower(author))>0 AND position('|marta|' in cats)=0);
+
+
+===========
+Other stuff
+===========
+
+% Storing a copy of the database schema:
+% (you will need to enter your database password several times)
+
+/bin/mv schema schema-bak
+touch schema
+pg_dump -h localhost -t bib_items --schema-only --no-owner $USER >> schema
+pg_dump -h localhost -t bib_cats --schema-only --no-owner $USER >> schema
+pg_dump -h localhost -t bib_types --schema-only --no-owner $USER >> schema
+

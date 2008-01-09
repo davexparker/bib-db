@@ -1,0 +1,30 @@
+.bib-block {
+}
+
+.bib-row-alt1 {
+	background-color: #dddddd;
+}
+.bib-row-alt2 {
+	background-color: #dddddd;
+}
+
+.bib-bullet {
+	display:none;
+}
+
+.bib-count {
+	display:none;
+}
+
+.bib-item {
+	vertical-align: top;
+	padding: 3px;
+	border-bottom: solid 2px #bbbbbb;
+}
+
+.bib-key { font-weight: bold; }
+.bib-auth { }
+.bib-title { font-weight: bold; }
+.bib-src { }
+.bib-month { }
+.bib-year { }

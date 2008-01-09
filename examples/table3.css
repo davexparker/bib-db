@@ -1,0 +1,35 @@
+.bib-block {
+}
+
+.bib-row-alt1 {
+	background-color: #ffffcc;
+}
+.bib-row-alt2 {
+	background-color: #dddddd;
+}
+
+.bib-bullet {
+	vertical-align: top;
+	width: 47px;
+	background-color: #ffffff;
+	background-image: url(bullet.gif);
+	background-position: 3px 5px;
+	background-repeat: no-repeat;
+}
+
+.bib-count {
+	display: none;
+}
+
+.bib-item {
+	vertical-align: top;
+	padding: 3px;
+	border-bottom: solid 4px #ffffff;
+}
+
+.bib-key { display: none; }
+.bib-auth { display: block; }
+.bib-title { display: block; font-weight: bold; }
+.bib-src { display: block; }
+.bib-month { }
+.bib-year { }

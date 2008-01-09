@@ -1,0 +1,113 @@
+/* ============================================================== */
+
+/* All bib item lists are split up into...
+
+    .biblist
+      .biblist-section-header
+      .biblist-section
+        .biblist-block-header
+        .biblist-block
+
+*/
+
+/* For bib item lists displayed as a table,
+   you might want to put a border around each block... */
+   
+.biblist-block {
+	border: solid 2px #999999;
+	padding: 2px 2px 0px 2px;
+	background-color: #ffffff;
+}
+
+/* ============================================================== */
+
+/* For bib item lists displayed as (ul) lists */
+
+li.biblist-item {
+	list-style-type: square;
+	padding-bottom: 7px;
+}
+
+/* ============================================================== */
+
+/* For bib item lists displayed as tables */
+
+/* Alternate rows of the table */
+tr.biblist-row-alt1 {
+	background-color: #dddddd;
+}
+tr.biblist-row-alt2 {
+	background-color: #bbbbbb;
+}
+
+/* Table cell containing a bullet */
+/*td.biblist-bullet {
+	vertical-align: top;
+	width: 18px;
+	background-image: url(/images/bullet.gif);
+	background-position: 3px 3px;
+	background-repeat: no-repeat;
+	border-bottom: solid 2px #ffffff;
+}*/
+td.biblist-bullet {
+	display:none;
+}
+
+/* Table cell containing a counter */
+td.biblist-count {
+	text-align: center;
+	vertical-align: top;
+	padding: 3px;
+	border-bottom: solid 2px #ffffff;
+}
+/*td.biblist-count {
+	display:none;
+}*/
+
+/* Table cell containing bib item */
+td.biblist-item {
+	vertical-align: top;
+	padding: 3px;
+	border-bottom: solid 2px #ffffff;
+	border-left: solid 2px #ffffff;
+}
+
+/* ============================================================== */
+
+/* Box containing detailed info on a pub item */
+
+.bibbox {
+	border:solid 2px #999999;
+	padding: 2px 2px 0px 2px;
+	background-color: #ffffff;
+}
+.bibbox tr.bibbox-row-alt1 {
+	background-color:#dddddd;
+}
+.bibbox tr.bibbox-row-alt2 {
+	background-color:#bbbbbb;
+}
+.bibbox td.bibbox-td {
+	padding:10px;
+	vertical-align:top;
+	border-bottom:solid 2px #ffffff;
+}
+
+/* ============================================================== */
+
+/* Individual components of each bib item description
+   Use "display:block;" to put the component on it's own line
+   Use "display:none;" to hide the component */
+
+.bib-key { display:block; font-weight:bold; }
+.bibbox .bib-key { display:none; } /* Don't show key on individual bib item pages */
+.bib-auth { display:block; }
+.bib-title { display:block; font-weight:bold; }
+.bib-src { display:block; }
+.bib-date { display:block; } /* date = month + year */
+.bib-month { }
+.bib-year { }
+.bib-files { display:none; }
+.bib-highlight { background-color:#ffff00; }
+
+/* ============================================================== */

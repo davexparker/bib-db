@@ -1,0 +1,11 @@
+.bib-item {
+	list-style-image: url(star.gif);
+	padding-bottom: 15px;
+}
+
+.bib-key { font-weight: bold; }
+.bib-auth { display: block; }
+.bib-title { display: block; font-weight: bold; }
+.bib-src { display: block; }
+.bib-month { }
+.bib-year { }
