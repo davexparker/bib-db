@@ -121,6 +121,23 @@ CREATE TABLE bib_types (
 
 
 --
+-- Data for Name: bib_types; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY bib_types ("type", type_index, type_description) FROM stdin;
+book	1	Books
+inbook	2	Book chapters
+phdthesis	3	Theses
+mastersthesis	3	Theses
+article	4	Journal papers
+inproceedings	5	Conference papers
+techreport	6	Technical reports
+unpublished	7	Other
+proceedings	1	Books
+\.
+
+
+--
 -- PostgreSQL database dump complete
 --
 

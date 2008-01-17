@@ -81,5 +81,5 @@ Other stuff
 touch schema
 pg_dump -h localhost -t bib_items --schema-only --no-owner $USER >> schema
 pg_dump -h localhost -t bib_cats --schema-only --no-owner $USER >> schema
-pg_dump -h localhost -t bib_types --schema-only --no-owner $USER >> schema
+pg_dump -h localhost -t bib_types --no-owner $USER >> schema
 
