@@ -1,0 +1,855 @@
+<?php
+
+//-----------------------------------------------------------------------------
+// Includes
+//-----------------------------------------------------------------------------
+
+require "config.php";
+require $bib_connect_file;
+
+//-----------------------------------------------------------------------------
+// Global variables
+//-----------------------------------------------------------------------------
+
+// Month names
+// NB: There are 2 options for "undefined" corresponding to indices 0 and 13.
+//     Only matters if you care where an item appears when sorting by month.
+$bib_month_names = array("0"=>"", "1"=>"January", "2"=>"February", "3"=>"March", "4"=>"April", "5"=>"May", "6"=>"June", "7"=>"July", "8"=>"August", "9"=>"September", "10"=>"October", "11"=>"November", "12"=>"December", "13"=>"");
+
+// Main database fields for bibliography items (excludes "key", "cats")
+$bib_item_fields = array("type", "address", "author", "booktitle", "edition", "editor", "institution", "journal", "month", "note", "number", "organization", "pages", "publisher", "school", "series", "title", "type2", "volume", "year", "url", "filename", "abstract", "links");
+
+// Bibliography item types (à la bibtex)
+$bib_item_types = array("inproceedings","article","book","phdthesis","mastersthesis","techreport","unpublished");
+
+// Storage for info about a bib item list
+$bib_list_item_link = "";
+$bib_list_item_start = "";
+$bib_list_item_end = "";
+$bib_list_block_start = "";
+$bib_list_block_end = "";
+$bib_list_sections = NULL;
+$bib_list_counter = 1;
+$bib_list_alt = 1;
+
+//-----------------------------------------------------------------------------
+// General utiltity functions
+//-----------------------------------------------------------------------------
+
+// Extract a variable from POST/GET
+
+function extract_var_from_post_get($var)
+{
+	$res = "";
+	if (isset($_REQUEST[$var])) {
+		$res = $_REQUEST[$var];
+	}
+	if (is_string($res)) {
+		$res = stripslashes($res);
+	}
+	return $res;
+}
+
+//-----------------------------------------------------------------------------
+
+// Extract multiple variables from POST/GET
+
+function extract_vars_from_post_get(&$res, $arr)
+{
+	foreach ($arr as $var) {
+		$res[$var] = "";
+		if (isset($_REQUEST[$var])) {
+			$res[$var] = $_REQUEST[$var];
+		}
+		if (is_string($res[$var])) {
+			$res[$var] = stripslashes($res[$var]);
+		}
+	}
+	return $res;
+}
+
+//-----------------------------------------------------------------------------
+
+// Extract "key" variable from POST/GET
+
+function extract_key_from_post_get()
+{
+	// get variable
+	$key = extract_var_from_post_get("key");
+	// replace ' 's with '+'s because they get mangled in the url
+	$key = preg_replace("/ /", "+", $key);
+	
+	return $key;
+}
+
+//-----------------------------------------------------------------------------
+
+// Log an error message to the error log.
+// If $dbconn is provided, last DB error will also be logged.
+
+function bib_log_error($err_msg, $dbconn = NULL)
+{
+	global $bib_error_file;
+	// open log file
+	$fout = fopen($bib_error_file, "a");
+	if ($fout) {
+		// write date/time
+		fwrite($fout, "\nTime: ".date("D M j G:i:s T Y")."\n");
+		// write error message
+		fwrite($fout, "Error: ".$err_msg.".\n");
+		// if a db error, write db error message too
+		if ($dbconn) fwrite($fout, "Postgresql error: ".pg_last_error($dbconn)."\n");
+		// close log file
+		fclose($fout);
+	}
+}
+
+//-----------------------------------------------------------------------------
+
+// Execute an arbitrary SQL query and return results in an array.
+// Result is NULL in case of error.
+// By default array is 2D but if there is only one column it is 1D.
+// Existing DB connection can be passed in to be reused.
+
+function bib_db_query($query, $existing_dbconn = NULL)
+{
+	// connect to database
+	$dbconn = $existing_dbconn ? $existing_dbconn : bib_connect_to_db();
+	if (!$dbconn) { bib_log_error("Couldn't connect to database"); return NULL; }
+	
+	// query database
+	$result = @pg_query($dbconn, $query);
+	if (!$result) { bib_log_error("Couldn't execute query \"$query\"", $dbconn); return NULL; }
+	
+	// initialise result array
+	$res = array();
+	
+	// for a single column of results, build a 1D array
+	if (pg_num_fields($result) <= 1) {
+		while($row = pg_fetch_array($result)) {
+			// store single row item in array, de-escaping if necessary
+			$res[] = (is_string($row[0])) ? stripslashes($row[0]) : $row[0];
+		}
+	}
+	// for multiple columns, build a 2D array
+	else {
+		$res = array();
+		while($row = pg_fetch_array($result)) {
+			// de-escape any strings
+			foreach ($row as $key => $val) {
+				if (is_string($val))
+					$row[$key] = stripslashes($val);
+			}
+			// store row in array
+			$res[] = $row;
+		}
+	}
+	
+	// disconnect from database
+	if (!$existing_dbconn) bib_disconnect_db($dbconn);
+	
+	// return result
+	return $res;
+}
+
+//-----------------------------------------------------------------------------
+
+// Execute an arbitrary SQL update query and return number of affected rows.
+// Result is NULL in case of error.
+// Existing DB connection can be passed in to be reused.
+
+function bib_db_update_query($query, $existing_dbconn = NULL)
+{
+	// connect to database
+	$dbconn = $existing_dbconn ? $existing_dbconn : bib_connect_to_db();
+	if (!$dbconn) { bib_log_error("Couldn't connect to database"); return NULL; }
+	
+	// query database
+	$result = @pg_query($dbconn, $query);
+	if (!$result) { bib_log_error("Couldn't execute query \"$query\"", $dbconn); return NULL; }
+	
+	// disconnect from database
+	if (!$existing_dbconn) bib_disconnect_db($dbconn);
+	
+	// return result
+	return pg_affected_rows($result);
+}
+
+//-----------------------------------------------------------------------------
+
+// Get array of category names.
+// If anything goes wrong, just return empty array.
+
+function bib_get_cat_names()
+{
+	$result = bib_db_query("SELECT name,description FROM bib_cats ORDER BY cat_group, name");
+	if (!$result) $result = array();
+	return $result;
+}
+
+//-----------------------------------------------------------------------------
+
+// Construct an SQL clause with which to select bib items
+// First argument is field.
+// Subsequent arguments are possible values for field, e.g.:
+//   bib_build_sql_clause("type", "article", "inproceedings").
+// If first argument is "!", clause is negated, e.g.:
+//   bib_build_sql_clause("type", "!", "techreport", "unpublished").
+
+function bib_build_sql_clause($args)
+{
+	global $bib_item_fields;
+	
+	// check arguments for errors
+	if (count($args) == 0) {
+		bib_log_error("No field provided to construct SQL clause");
+		return "";
+	}
+	$field = $args[0];
+	if (!(in_array($field, $bib_item_fields) || $field == "cat" || $field == "key")) {
+		bib_log_error("No such field \"".$field."\"");
+		return "";
+	}
+	if (count($args) == 1) {
+		bib_log_error("Incomplete information to construct SQL clause");
+		return "";
+	}
+	// check for negation
+	if ($args[1] == "!") {
+		$negate = true;
+		$start = 2;
+	} else {
+		$negate = false;
+		$start = 1;
+	}
+	// collate elements of list to build clause
+	$n = count($args);
+	$clauses = array();
+	for ($i = $start; $i < $n; $i++) {
+		if ($field != "cat") {
+			$clauses []= "$field='".pg_escape_string($args[$i])."'";
+		} else {
+			$clauses []= "position('|".pg_escape_string($args[$i])."|' in cats)>0";
+		}
+	}
+	// compose elements
+	$clause =  implode(" OR ", $clauses);
+	if ($negate) $clause = "NOT(".$clause.")";
+	
+	return $clause;
+}
+
+//-----------------------------------------------------------------------------
+// Functions to access/modify bibliography items
+//-----------------------------------------------------------------------------
+
+// Fetch bibliography item.
+// Returns array of fields.
+// If anything goes wrong, return NULL.
+
+function bib_fetch_item($key)
+{
+	// check key is valid
+	if (preg_match("/^[A-Za-z0-9_\-+]+$/", $key) != 1) {
+		bib_log_error("Cannot fetch item \"$key\" - key is invalid");
+		return NULL;
+	}
+	
+	// query database
+	$key = pg_escape_string($key);
+	$result = bib_db_query("SELECT * FROM bib_items WHERE key='$key';");
+	if (!$result) return NULL;
+	$item = $result[0];
+	
+	// expand category information
+	$item["cats"] = explode("|", $item["cats"]);
+	
+	return $item;
+}
+
+//-----------------------------------------------------------------------------
+
+// Add a new bibliography item.
+// Returns any error message, empty return denotes success.
+
+function bib_add_item($key, $type)
+{
+	global $bib_item_types;
+	
+	// check key is valid
+	if (preg_match("/^[A-Za-z0-9_\-+]+$/", $key) != 1) {
+		return "Key \"$key\" is invalid";
+	}
+	
+	// check type is present/valid
+	if (!in_array($type, $bib_item_types)) {
+		return "Invalid type \"$type\"";
+	}
+	
+	// update db
+	$key = pg_escape_string($key);
+	$type = pg_escape_string($type);
+	$result = bib_db_update_query("INSERT INTO bib_items (key, type) VALUES ('$key', '$type')");
+	if ($result != 1) {
+		return "Could not add item \"$key\" - duplicate key perhaps";
+	}
+}
+
+//-----------------------------------------------------------------------------
+
+// Delete a bibliography item.
+// Returns any error message, empty return denotes success.
+
+function bib_delete_item($key)
+{
+	// check key is valid
+	if (preg_match("/^[A-Za-z0-9_\-+]+$/", $key) != 1) {
+		return "Key \"$key\" is invalid";
+	}
+	
+	// update db
+	$key = pg_escape_string($key);
+	$result = bib_db_update_query("DELETE FROM bib_items WHERE key='$key'");
+	if ($result != 1) {
+		return "Could not delete item \"$key\"";
+	}
+}
+
+//-----------------------------------------------------------------------------
+
+// Update bibliography item.
+// Takes array of fields $item.
+// This should also include an index "key" with the key.
+// Category information can also be included as an array under index "cats".
+// Returns any error message, empty return denotes success.
+
+function bib_update_item($item)
+{
+	global $bib_item_fields;
+	
+	// check key is present and valid
+	if (!array_key_exists("key", $item)) {
+		return "No key supplied";
+	}
+	if (preg_match("/^[A-Za-z0-9_\-+]+$/", $item["key"]) != 1) {
+		return "Key \"".$item["key"]."\" is invalid";
+	}
+	
+	// do some checks on fields supplied
+	if (array_key_exists("year", $item)) if ($item["year"]) if (!is_numeric($item["year"])) return "Invalid year";
+	if (array_key_exists("month", $item)) if ($item["month"]) if (!is_numeric($item["month"])) return "Invalid month";
+	
+	// build update query
+	$set = "";
+	// go through all the normal fields
+	foreach ($item as $item_key => $item_val) {
+		if (in_array($item_key, $bib_item_fields)) {
+			if ($set != "") $set .= ", ";
+			if (is_string($item_val)) $item_val = pg_escape_string($item_val);
+			if (($item_key == "month" || $item_key == "year") && $item_val == "") {
+				$set .= "$item_key=NULL";
+			} else {
+				$set .= "$item_key='$item_val'";
+			}
+		}
+	}
+	// then add category info
+	if (array_key_exists("cats", $item)) {
+		if ($set != "") $set .= ", ";
+		if ($item["cats"]) {
+			foreach ($item["cats"] as $i => $cat) if (is_string($cat)) $item["cats"][$i] = pg_escape_string($cat);
+			$set .= "cats='|".implode("|", $item["cats"])."|'";
+		} else {
+			$set .= "cats=''";
+		}
+	}
+	// build/execute whole query
+	if (strlen($set) > 0) {
+		$item["key"] = pg_escape_string($item["key"]);
+		$result = bib_db_update_query("UPDATE bib_items SET $set WHERE key='".$item["key"]."'");
+		if ($result != 1) {
+			return "Could not update item \"$key\"";
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------
+
+// Display bibliography item.
+// Item details passed in in array $item.
+// Link for each item (optional) is given by $link, where %k expands to the key.
+
+function bib_display_item($item, $link = NULL, $indent = 0)
+{
+	global $bib_month_names;
+	$tabs = str_repeat("\t", $indent);
+	
+	// key
+	echo "$tabs<a name=\"".$item["key"]."\"></a>\n";
+	echo "$tabs<span class=\"bib-key\">[".$item["key"]."]</span>\n";
+	// author
+	echo "$tabs<span class=\"bib-auth\">".$item["author"].".</span>\n";
+	// title
+	if ($link) {
+		$link = preg_replace("/%k/", $item["key"], $link);
+		echo "$tabs<span class=\"bib-title\"><a href=\"$link\">".$item["title"]."</a>.</span>\n";
+	} else {
+		echo "$tabs<span class=\"bib-title\">".$item["title"].".</span>\n";
+	}
+	// src
+	$src = "";
+	switch ($item["type"]) {
+	
+	case "inproceedings":
+		$src .= "In <em>".$item["booktitle"]."</em>";
+		if ($item["volume"] && $item["series"]) $src .= ", volume ".$item["volume"]." of ".$item["series"];
+		if ($item["pages"]) $src .= ", pages ".$item["pages"];
+		if ($item["organization"]) $src .= ", ".$item["organization"];
+		if ($item["publisher"]) $src .= ", ".$item["publisher"];
+		if ($item["note"]) $src .= ". ".$item["note"];
+		break;
+		
+	case "article":
+		$src .= "<em>".$item["journal"]."</em>";
+		if ($item["volume"]) $src .= ", ".$item["volume"];
+		if ($item["number"]) $src .= "(".$item["number"].")";
+		if ($item["pages"]) $src .= ", pages ".$item["pages"];
+		if ($item["publisher"]) $src .= ", ".$item["publisher"];
+		if ($item["note"]) $src .= ". ".$item["note"];
+		break;
+		
+	case "book":
+		if ($item["volume"] && $item["series"]) $src .= "Volume ".$item["volume"]." of ".$item["series"].". ";
+		if ($item["publisher"]) $src .= $item["publisher"];
+		if ($item["note"]) $src .= ". ".$item["note"];
+		break;
+		
+	case "phdthesis":
+		$src .= ($item["type2"] ? $item["type2"] : "Ph.D. thesis").", ".$item["school"];
+		if ($item["note"]) $src .= ". ".$item["note"];
+		break;
+		
+	case "mastersthesis":
+		$src .= ($item["type2"] ? $item["type2"] : "Masters thesis").", ".$item["school"];
+		if ($item["note"]) $src .= ". ".$item["note"];
+		break;
+		
+	case "techreport":
+		$src .= ($item["type2"] ? $item["type2"] : "Technical report")." ".$item["number"].", ".$item["institution"];
+		if ($item["note"]) $src .= ". ".$item["note"];
+		break;
+		
+	case "unpublished":
+		if ($item["note"]) $src .= $item["note"];
+		break;
+		
+	default:
+		bib_log_error("Unknown bibliography item type \"".$item["type"]."\"");
+		break;
+	}
+	if ($src) echo "$tabs<span class=\"bib-src\">$src.</span>\n";
+	// date
+	echo "$tabs<span class=\"bib-date\">";
+	if ($item["month"]) echo "<span class=\"bib-month\">".$bib_month_names[$item["month"]]." </span>";
+	echo "<span class=\"bib-year\">".$item["year"].".</span></span>\n";
+	// files
+	$item_files = bib_get_item_files($item);
+	if (count($item_files) > 0) {
+		echo "$tabs<span class=\"bib-files\">\n";
+		foreach ($item_files as $item_file) {
+			echo "$tabs    [<a href=\"".$item_file["url"]."\">".$item_file["ext"]."</a>]\n";
+		}
+		echo "$tabs</span>\n";
+	}
+}
+
+function bib_display_item_from_key($key, $link = NULL, $indent = 0)
+{
+	$item = bib_fetch_item($key);
+	if ($key) bib_display_item($item, $link, $indent);
+}
+
+//-----------------------------------------------------------------------------
+
+// Display bibliography item.
+// Item details passed in in array $item.
+// Link for each item (optional) is given by $link, where %k expands to the key.
+
+function bib_display_item_detailed($item, $link = NULL, $indent = 0)
+{
+	global $bib_images_dir;
+	global $bib_images_url;
+	$table_alt = 2;
+	
+	echo "<div class=\"bibbox\"><table cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n";
+	echo "\n<tr class=\"bibbox-row-alt$table_alt\">\n<td class=\"bibbox-td\">\n";
+	bib_display_item($item, "");
+	
+	if (array_key_exists("abstract", $item)) if ($item["abstract"]) {
+		echo "</td>\n</tr>\n";
+		echo "\n<tr class=\"bibbox-row-alt".($table_alt = 3 - $table_alt)."\">\n<td class=\"bibbox-td\">\n";
+		if ($item["type"] == "book")
+			if (file_exists($bib_images_dir."/".$item["key"].".gif"))
+				echo "<img style=\"border:0;float:left;margin:0px 10px 10px 0px;\" src=\"".$bib_images_url."/".$item["key"].".gif\" alt=\"Front cover\">\n";
+		echo "<b>Abstract.</b>\n".$item["abstract"]."\n";
+	}
+
+	$item_files = bib_get_item_files($item);
+	if ($item_files) if (count($item_files) > 0) {
+		echo "</td>\n</tr>\n";
+		echo "\n<tr class=\"bibbox-row-alt".($table_alt = 3 - $table_alt)."\">\n<td class=\"bibbox-td\">\n";
+		echo "<b>Download:</b>\n";
+		foreach ($item_files as $item_file) {
+			switch ($item_file["ext"]) {
+				case "ps": $image = "ps.gif"; break;
+				case "ps.gz": $image = "ps.gif"; break;
+				case "pdf": $image = "pdf.gif"; break;
+				case "bib": $image = "tex.gif"; break;
+				default: $image = "file.gif"; break;
+			}
+			echo "&nbsp;";
+			echo "<a href=\"".$item_file["url"]."\">";
+			echo "<img border=\"0\" src=\"".$bib_images_url."/$image\" alt=\"".$item_file["ext"]."\" style=\"vertical-align:middle;\">";
+			echo "</a> ";
+			echo "<b>".$item_file["ext"]."</b> ";
+			if (array_key_exists("filesize", $item_file)) if ($item_file["filesize"]) echo "(".$item_file["filesize"].") ";
+			echo "\n";
+		}
+		if (array_key_exists("filename", $item)) if ($item["filename"]) {
+			if (array_key_exists("publisher", $item)) if (substr_count($item["publisher"], "Springer")) {
+			echo "<br><br><b>Note:</b> The original publication is available at <a target=\"_blank\" href=\"http://www.springerlink.com/\">www.springerlink.com</a>\n";
+			}
+		}
+	}
+	
+	echo "</td>\n</tr>\n";
+	echo "\n<tr class=\"bibbox-row-alt".($table_alt = 3 - $table_alt)."\">\n<td class=\"bibbox-td\">\n";
+	echo "<b>Links:</b>\n";
+	$url = "http://scholar.google.com/scholar?q=".rawurlencode($item["title"])."&ie=UTF-8&oe=UTF-8&hl=en&btnG=Search";
+	echo "[<a target=\"blank\" href=\"".htmlentities($url)."\">Google Scholar</a>]\n";
+	$url = "http://scholar.google.com/search?q=site:citeseer.ist.psu.edu+".rawurlencode($item["title"])."&ie=UTF-8&oe=UTF-8&hl=en&btnG=Search";
+	echo "[<a target=\"blank\" href=\"".htmlentities($url)."\">CiteSeer</a>]\n";
+	
+	if (array_key_exists("url", $item)) if ($item["url"]) {
+		echo "</td>\n</tr>\n";
+		echo "\n<tr class=\"bibbox-row-alt".($table_alt = 3 - $table_alt)."\">\n<td class=\"bibbox-td\">\n";
+		echo "Available from: \n";
+		echo "<a target=\"blank\" href=\"".$item["url"]."\">".$item["url"]."</a>\n";
+	}
+	
+	if (array_key_exists("links", $item)) if ($item["links"]) {
+		echo "</td>\n</tr>\n";
+		echo "\n<tr class=\"bibbox-row-alt".($table_alt = 3 - $table_alt)."\">\n<td class=\"bibbox-td\">\n";
+		echo $item["links"]."\n";
+	}
+	
+	echo "</td>\n</tr>\n\n</table></div>\n";
+}
+
+//-----------------------------------------------------------------------------
+
+// Get local files associated with bibliography item
+
+function bib_get_item_files($item)
+{
+	global $bib_files_dir;
+	global $bib_bibtex_dir;
+	global $bib_files_url;
+	global $bib_bibtex_url;
+	
+	// count the files
+	$item_files = array();
+	
+	if (array_key_exists("filename", $item)) if ($item["filename"]) {
+		foreach (array("ps", "ps.gz", "pdf") as $ext) {
+			$filename = "$bib_files_dir/".$item["filename"].".$ext";
+			if (file_exists($filename)) {
+				$url = $bib_files_url."/".$item["filename"].".$ext";
+				$filesize = filesize($filename)/1024;
+				$filesize = ($filesize > 1024) ? (round($filesize/1024, 2)." MB") : (round($filesize)." KB");
+				$item_files []= array("filename"=>$filename, "url"=>$url, "ext"=>$ext, "filesize"=>$filesize);
+			}
+		}
+	}
+	$filename = "$bib_bibtex_dir/".$item["key"].".bib";
+	if (file_exists($filename)) {
+		$url = $bib_bibtex_url."/".$item["key"].".bib";
+		$item_files []= array("filename"=>$filename, "url"=>$url, "ext"=>"bib");
+	}
+	
+	return $item_files;
+}
+
+//-----------------------------------------------------------------------------
+// Main API for creating/displaying lists of bibliography items
+//-----------------------------------------------------------------------------
+
+// Create a new list of bibliography items.
+
+function bib_new_list()
+{
+	global $bib_list_sections;
+	
+	$bib_list_sections = array();
+	bib_new_section();
+}
+
+// Create a new section within the current list of bibliography items.
+
+function bib_new_section($header = "")
+{
+	global $bib_list_sections;
+	
+	// initialise section:
+	// select is "false" - section is initially empty
+	// list of sort operations is empty
+	$section = array("header"=>$header, "select"=>"false", "sortby_list"=>array());
+	$bib_list_sections []= $section;
+}
+
+//-----------------------------------------------------------------------------
+
+// Add to the current list of bibliography items.
+// First argument is field to select on.
+// Subsequent arguments are possible values for field, e.g.:
+//   bib_add("type", "article", "inproceedings").
+// If first argument is "!", selection is negated, e.g.:
+//   bib_add("type", "!", "techreport", "unpublished").
+
+function bib_add()
+{
+	global $bib_list_sections;
+	
+	// construct corresponding sql clause
+	$clause = bib_build_sql_clause(func_get_args());
+	// modify select info for current section
+	$section = &$bib_list_sections[count($bib_list_sections)-1];
+	$section["select"] = "(".$section["select"].") OR (".$clause.")";
+}
+
+//-----------------------------------------------------------------------------
+
+// Add all bibliography items to the current list.
+
+function bib_add_all()
+{
+	global $bib_list_sections;
+	
+	// modify select info for current section
+	$section = &$bib_list_sections[count($bib_list_sections)-1];
+	$section["select"] = "true";
+}
+
+//-----------------------------------------------------------------------------
+
+// Filter the current list of bibliography items.
+// First argument is field to filter on.
+// Subsequent arguments are possible values for field, e.g.:
+//   bib_filter("type", "article", "inproceedings").
+// If first argument is "!", filter is negated, e.g.:
+//   bib_filter("type", "!", "techreport", "unpublished").
+
+function bib_filter()
+{
+	global $bib_list_sections;
+	
+	// construct corresponding sql clause
+	$clause = bib_build_sql_clause(func_get_args());
+	// modify select info for current section
+	$section = &$bib_list_sections[count($bib_list_sections)-1];
+	$section["select"] = "(".$section["select"].") AND (".$clause.")";
+}
+
+//-----------------------------------------------------------------------------
+
+// Sort the current list of bibliography items.
+
+function bib_sort_by($field, $dir = "asc" , $header = "")
+{
+	global $bib_item_fields;
+	global $bib_list_sections;
+	
+	// check arguments for errors
+	if (!($dir == "asc" || $dir == "desc" || $dir == "ASC" || $dir == "DESC")) {
+		bib_log_error("Invalid sort direction \"$dir\" - must be \"asc\" or \"desc\"");
+		return;
+	}
+	if (!(in_array($field, $bib_item_fields) || $field == "key")) {
+		bib_log_error("Can't sort by field \"".$field."\"");
+		return;
+	}
+	// store sort info in current section
+	$section = &$bib_list_sections[count($bib_list_sections)-1];
+	$section["sortby_list"][] = array("field"=>$field, "dir"=>$dir, "header"=>$header);
+}
+
+//-----------------------------------------------------------------------------
+
+// Display the current list of bibliography items as a table.
+// Link to be attached to each item is $link. "" => no link. %k expands to the key.
+// Highly configurable via CSS, including bullets/counters/graphics/etc.
+// This is the only way to get a numbered list where numbering runs across section.
+// Fails silently on error.
+
+function bib_display_list_table($link = "")
+{
+	bib_display_list(
+		$link,
+		"<div class=\"biblist-block\"><table cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">",
+		"</table></div>",
+		"\t<tr class=\"biblist-row-alt%a\">\n".
+		"\t<td class=\"biblist-bullet\">&nbsp;</td>\n".
+		"\t<td class=\"biblist-count\">%i</td>\n".
+		"\t<td class=\"biblist-item\">",
+		"\t</tr>"
+	);
+}
+
+// Display the current list of bibliography items as an unordered list.
+// Link to be attached to each item is $link. "" => no link. %k expands to the key.
+// List style configurable via CSS.
+// Fails silently on error.
+
+function bib_display_list_ul($link = "")
+{
+	bib_display_list($link, "<ul class=\"biblist-block\">", "</ul>", "<li class=\"biblist-item\">", "" );
+}
+
+// Display the current list of bibliography items as an ordered (numbered) list.
+// Link to be attached to each item is $link. "" => no link. %k expands to the key.
+// List style configurable via CSS.
+// Note numbering does not runs across sections - use a table (see above).
+// Fails silently on error.
+
+function bib_display_list_ol($link = "")
+{
+	bib_display_list($link, "<ol class=\"biblist-block\">", "</ol>", "<li class=\"biblist-item\">", "" );
+}
+
+// Display the current list of bibliography items in an arbitrary fashion.
+// Note you can do most things, presentation-wise, using the specific functions above and CSS.
+// Link to be attached to each item is $link. "" => no link. %k expands to the key.
+// HTML at start and end of each block/item can also be configured.
+// In the latter, %i expands to a counter and %a alternates between 1 and 2.
+// Fails silently on error.
+
+function bib_display_list($link = "", $block_start = "", $block_end = "", $item_start = "", $item_end = "")
+{
+	global $bib_list_sections;
+	global $bib_list_item_link;
+	global $bib_list_block_start;
+	global $bib_list_block_end;
+	global $bib_list_item_start;
+	global $bib_list_item_end;
+	global $bib_list_counter;
+	global $bib_list_alt;
+	
+	// store parameters globally so can access from recursive function below
+	$bib_list_item_link = $link;
+	$bib_list_item_start = $item_start;
+	$bib_list_item_end = $item_end;
+	$bib_list_block_start = $block_start;
+	$bib_list_block_end = $block_end;
+	// set up some loop vars
+	$bib_list_counter = 1;
+	$bib_list_alt = 1;
+	
+	// connect to database
+	$dbconn = bib_connect_to_db();
+	if (!$dbconn) { bib_log_error("Couldn't connect to database"); return; }
+	
+	echo "<div class=\"biblist\">\n\n";
+	
+	// display each section
+	foreach ($bib_list_sections as $section) {
+		// skip empty sections
+		if ($section["header"] || $section["select"] != "false") {
+			echo "<div class=\"biblist-section\">\n\n";
+			if ($section["header"]) {
+				echo "<div class=\"biblist-section-header\">";
+				echo $section["header"];
+				echo "</div>\n\n";
+			}
+			bib_display_sect_rec($dbconn, $section["sortby_list"], 0, $section["select"]);
+			echo "</div>\n\n";
+		}
+	}
+	
+	echo "</div>\n\n";
+	
+	// disconnect from database
+	bib_disconnect_db($dbconn);
+}
+
+function bib_display_sect_rec($dbconn, $sortby_list, $depth = 0, $where = "", $orderby = "")
+{
+	global $bib_list_item_link;
+	global $bib_list_item_start;
+	global $bib_list_item_end;
+	global $bib_list_block_start;
+	global $bib_list_block_end;
+	global $bib_list_counter;
+	global $bib_list_alt;
+	
+	// base case
+	if ($depth >= count($sortby_list))
+	{
+		// get items from database
+		$query = "SELECT * FROM bib_items";
+		if ($where) $query .= " WHERE ($where)";
+		if ($orderby) $query .= " ORDER BY $orderby";
+		$result = bib_db_query($query, $dbconn);
+		if (!$result) return;
+		// print block prefix
+		echo preg_replace(array("/%i/", "/%a/"), array($bib_list_counter, $bib_list_alt), $bib_list_block_start);
+		echo "\n\n";
+		// print each item
+		foreach ($result as $item) {
+			// print item prefix
+			echo preg_replace(array("/%i/", "/%a/"), array($bib_list_counter, $bib_list_alt), $bib_list_item_start);
+			echo "\n";
+			// print item
+			bib_display_item($item, $bib_list_item_link, 1);
+			// print item suffix
+			echo preg_replace(array("/%i/", "/%a/"), array($bib_list_counter, $bib_list_alt), $bib_list_item_end);
+			echo "\n\n";
+			// update loop vars
+			$bib_list_counter++;
+			$bib_list_alt = ($bib_list_alt == 1) ? 2 : 1;
+		}
+		// print block suffix
+		echo preg_replace(array("/%i/", "/%a/"), array($bib_list_counter, $bib_list_alt), $bib_list_block_end);
+		echo "\n\n";
+	}
+	// recursive case
+	else {
+		// get details of what we are sorting by
+		$sortby = $sortby_list[$depth];
+		// if there is no header to display, just recurse
+		if ($sortby["header"] == "") {
+			$new_orderby = ($orderby==""?"":$orderby.",").$sortby["field"]." ".$sortby["dir"];
+			bib_display_sect_rec($dbconn, $sortby_list, $depth+1, $where, $new_orderby);
+			return;
+		}
+		// otherwise, get (sorted) distinct values
+		$query = "SELECT DISTINCT ".$sortby["field"]." FROM bib_items";
+		if ($where) $query .= " WHERE ($where)";
+		$query .= " ORDER BY ".$sortby["field"]." ".$sortby["dir"];
+		$result = bib_db_query($query, $dbconn);
+		if (!$result) return;
+		// loop over each value
+		foreach ($result as $val) {
+			// print header
+			echo "<div class=\"biblist-block-header\">";
+			echo preg_replace("/%s/", $val, $sortby["header"]);
+			echo "</div>\n\n";
+			// recurse
+			$new_where = ($where==""?"":$where." AND ").$sortby["field"]."='".$val."'";
+			bib_display_sect_rec($dbconn, $sortby_list, $depth+1, $new_where, $orderby);
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------
+
+?>
