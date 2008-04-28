@@ -100,7 +100,7 @@ case "inproceedings":
 		if ($item["month"] == $month_index) echo " selected";
 		echo ">$month_name";
 	}
-	echo "</td></tr>\n";
+	echo "</select></td></tr>\n";
 	echo "<tr><td><b>Note: </b></td><td><input type=\"text\" size=\"100\" name=\"note\" value=\"".$item["note"]."\"></td></tr>\n";
 	break;
 	
@@ -120,7 +120,7 @@ case "article":
 		if ($item["month"] == $month_index) echo " selected";
 		echo ">$month_name";
 	}
-	echo "</td></tr>\n";
+	echo "</select></td></tr>\n";
 	echo "<tr><td><b>Note: </b></td><td><input type=\"text\" size=\"100\" name=\"note\" value=\"".$item["note"]."\"></td></tr>\n";
 	break;
 	
@@ -142,7 +142,7 @@ case "proceedings":
 		if ($item["month"] == $month_index) echo " selected";
 		echo ">$month_name";
 	}
-	echo "</td></tr>\n";
+	echo "</select></td></tr>\n";
 	echo "<tr><td><b>Note: </b></td><td><input type=\"text\" size=\"100\" name=\"note\" value=\"".$item["note"]."\"></td></tr>\n";
 	break;
 	
@@ -165,7 +165,7 @@ case "inbook":
 		if ($item["month"] == $month_index) echo " selected";
 		echo ">$month_name";
 	}
-	echo "</td></tr>\n";
+	echo "</select></td></tr>\n";
 	echo "<tr><td><b>Note: </b></td><td><input type=\"text\" size=\"100\" name=\"note\" value=\"".$item["note"]."\"></td></tr>\n";
 	break;
 	
@@ -184,7 +184,7 @@ case "mastersthesis":
 		if ($item["month"] == $month_index) echo " selected";
 		echo ">$month_name";
 	}
-	echo "</td></tr>\n";
+	echo "</select></td></tr>\n";
 	echo "<tr><td><b>Note: </b></td><td><input type=\"text\" size=\"100\" name=\"note\" value=\"".$item["note"]."\"></td></tr>\n";
 	break;
 	
@@ -203,7 +203,7 @@ case "techreport":
 		if ($item["month"] == $month_index) echo " selected";
 		echo ">$month_name";
 	}
-	echo "</td></tr>\n";
+	echo "</select></td></tr>\n";
 	echo "<tr><td><b>Note: </b></td><td><input type=\"text\" size=\"100\" name=\"note\" value=\"".$item["note"]."\"></td></tr>\n";
 	break;
 	
@@ -218,7 +218,7 @@ case "unpublished":
 		if ($item["month"] == $month_index) echo " selected";
 		echo ">$month_name";
 	}
-	echo "</td></tr>\n";
+	echo "</select></td></tr>\n";
 	echo "<tr><td><b>Year: </b></td><td><input type=\"text\" size=\"100\" name=\"year\" value=\"".$item["year"]."\"></td></tr>\n";
 	break;
 	
@@ -261,6 +261,8 @@ default:
 <br>
 
 <input type="submit" value="Submit changes">
+
+</form>
 
 </td></tr></table>
 
