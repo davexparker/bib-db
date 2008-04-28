@@ -70,7 +70,9 @@ else {
 
 <input type="submit" value="Submit changes">
 
-<br><br>
+<br>
+
+<h3>Bibtex fields:</h3>
 
 <table>
 <tr><td><b>Key:</b></td><td><b><?php echo $item["key"]; ?></b></td></tr>
@@ -233,8 +235,19 @@ default:
 <tr><td><input type="submit" value="Submit changes"></td><td></td></tr>
 <tr><td>&nbsp;</td><td></td></tr>
 
-<tr><td><b>URL: </b></td><td><input type="text" size="100" name="url" value="<?php echo $item["url"]; ?>"></td></tr>
+</table>
+
+<h3>Other database fields:</h3>
+
+<table>
+
+<tr><td colspan="2">For local publications, enter the name of the PDF file:</td></tr>
 <tr><td><b>Filename: </b></td><td><input type="text" size="100" name="filename" value="<?php echo $item["filename"]; ?>"></td></tr>
+<tr><td colspan="2">For other people's publications, enter the URL where it can be found:</td></tr>
+<tr><td><b>URL: </b></td><td><input type="text" size="100" name="url" value="<?php echo $item["url"]; ?>"></td></tr>
+
+<tr><td>&nbsp;</td></tr>
+
 <tr><td valign="top"><b>Abstract: </b><br>(html)</td><td><textarea rows="10" cols="70" name="abstract"><?php echo $item["abstract"]; ?></textarea></td></tr>
 <tr><td valign="top"><b>Links: </b><br>(html)</td><td><textarea rows="5" cols="70" name="links"><?php echo $item["links"]; ?></textarea></td></tr>
 
