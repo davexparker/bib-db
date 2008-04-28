@@ -241,7 +241,7 @@ default:
 
 <table>
 
-<tr><td colspan="2">For local publications, enter the name of the PDF file:</td></tr>
+<tr><td colspan="2">For local publications, enter the name of the PDF/PS file (without the extension):</td></tr>
 <tr><td><b>Filename: </b></td><td><input type="text" size="100" name="filename" value="<?php echo $item["filename"]; ?>"></td></tr>
 <tr><td colspan="2">For other people's publications, enter the URL where it can be found:</td></tr>
 <tr><td><b>URL: </b></td><td><input type="text" size="100" name="url" value="<?php echo $item["url"]; ?>"></td></tr>
