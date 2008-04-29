@@ -786,6 +786,7 @@ function bib_display_item_detailed($item, $link = NULL, $indent = 0)
 //-----------------------------------------------------------------------------
 
 // Get local files associated with bibliography item
+// ($item only actually needs to contain "filename" and "key")
 
 function bib_get_item_files($item)
 {
