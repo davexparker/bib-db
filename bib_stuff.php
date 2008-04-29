@@ -872,6 +872,19 @@ function bib_add()
 
 //-----------------------------------------------------------------------------
 
+// Add to the current list of bibliography items based on an sql expression.
+
+function bib_add_sql($sql)
+{
+	global $bib_list_sections;
+	
+	// modify select info for current section
+	$section = &$bib_list_sections[count($bib_list_sections)-1];
+	$section["select"] = "(".$section["select"].") OR (".$sql.")";
+}
+
+//-----------------------------------------------------------------------------
+
 // Add all bibliography items to the current list.
 
 function bib_add_all()
@@ -901,6 +914,18 @@ function bib_filter()
 	// modify select info for current section
 	$section = &$bib_list_sections[count($bib_list_sections)-1];
 	$section["select"] = "(".$section["select"].") AND (".$clause.")";
+}
+//-----------------------------------------------------------------------------
+
+// Filter the current list of bibliography items based on an sql expression.
+
+function bib_filter_sql($sql)
+{
+	global $bib_list_sections;
+	
+	// modify select info for current section
+	$section = &$bib_list_sections[count($bib_list_sections)-1];
+	$section["select"] = "(".$section["select"].") AND (".$sql.")";
 }
 
 //-----------------------------------------------------------------------------
