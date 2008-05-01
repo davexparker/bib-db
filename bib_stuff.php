@@ -787,15 +787,15 @@ function bib_display_item_detailed($item, $link = NULL, $indent = 0)
 
 // Get local files associated with bibliography item
 // ($item only actually needs to contain "filename" and "key")
+// (can specify if bibtex should be included too)
 
-function bib_get_item_files($item)
+function bib_get_item_files($item, $bibtex = true)
 {
 	global $bib_files_dir;
 	global $bib_bibtex_dir;
 	global $bib_files_url;
 	global $bib_bibtex_url;
 	
-	// count the files
 	$item_files = array();
 	
 	if (array_key_exists("filename", $item)) if ($item["filename"]) {
@@ -809,10 +809,12 @@ function bib_get_item_files($item)
 			}
 		}
 	}
-	$filename = "$bib_bibtex_dir/".$item["key"].".bib";
-	if (file_exists($filename)) {
-		$url = $bib_bibtex_url."/".$item["key"].".bib";
-		$item_files []= array("filename"=>$filename, "url"=>$url, "ext"=>"bib");
+	if ($bibtex) {
+		$filename = "$bib_bibtex_dir/".$item["key"].".bib";
+		if (file_exists($filename)) {
+			$url = $bib_bibtex_url."/".$item["key"].".bib";
+			$item_files []= array("filename"=>$filename, "url"=>$url, "ext"=>"bib");
+		}
 	}
 	
 	return $item_files;
