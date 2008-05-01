@@ -4,68 +4,58 @@
 
 <?php $bib_list_item_extra_links = array("view" => "bibitem.php?key=%k", "edit" => "edit.php?key=%k"); ?>
 
-<h3>Marta papers with no author tag:</h3>
+<h3>Possible missing 'author' categories:</h3>
 
 <?php
-$keys = bib_db_query("SELECT key FROM bib_items WHERE ((position('Kwiatkowska' in author)>0) AND ((position('|marta|' in cats)=0) OR (cats IS NULL)))");
-if (count($keys)>0) {
-	echo "<ul>\n";
-	foreach ($keys as $key) {
-		$item = bib_fetch_item($key);
-		echo "<li>\n";
-		bib_display_item($item);
-	}
-	echo "</ul>\n";
-} else echo "&lt;none&gt;\n";
+bib_new_list();
+bib_add_sql("((position('M. Kwiatkowska' in author)>0) AND ((position('|marta|' in cats)=0) OR (cats IS NULL)))");
+bib_add_sql("((position('G. Norman' in author)>0) AND ((position('|gethin|' in cats)=0) OR (cats IS NULL)))");
+bib_add_sql("((position('D. Parker' in author)>0) AND ((position('|dave|' in cats)=0) OR (cats IS NULL)))");
+bib_add_sql("((position('M. Kattenbelt' in author)>0) AND ((position('|mark|' in cats)=0) OR (cats IS NULL)))");
+bib_display_list_ul("view.php?key=%k");
 ?>
 
-<h3>Marta/Gethin/Dave papers with no 'filename':</h3>
+<h3>Local papers with no 'filename' (or 'url'):</h3>
 
 <?php
-$keys = bib_db_query("SELECT key FROM bib_items WHERE ((position('|dave|' in cats)>0 OR position('|gethin|' in cats)>0 OR position('|marta|' in cats)>0) AND (type != 'book') AND (filename IS NULL OR filename = ''))");
-if (count($keys)>0) {
-	echo "<ul>\n";
-	foreach ($keys as $key) {
-		$item = bib_fetch_item($key);
-		echo "<li>\n";
-		bib_display_item($item);
-	}
-	echo "</ul>\n";
-} else echo "&lt;none&gt;\n";
-?>
-
-<h3>Marta/Gethin/Dave papers with no 'abstract':</h3>
-
-<?php
-$keys = bib_db_query("SELECT key FROM bib_items WHERE ((position('|dave|' in cats)>0 OR position('|gethin|' in cats)>0 OR position('|marta|' in cats)>0) AND (type != 'book') AND (abstract IS NULL OR abstract = ''))");
-if (count($keys)>0) {
-	echo "<ul>\n";
-	foreach ($keys as $key) {
-		$item = bib_fetch_item($key);
-		echo "<li>\n";
-		bib_display_item($item);
-	}
-	echo "</ul>\n";
-} else echo "&lt;none&gt;\n";
+// papers with some category (that is not 'prismbib')
+$sql = "length(cats)>0 AND cats != '|prismbib|'";
+// and that are not conference proceedings, books or msc theses
+$sql = "(".$sql.") AND (bib_items.type != 'proceedings' AND bib_items.type != 'book' AND bib_items.type != 'mastersthesis')";
+// and with missing filename/url
+$sql = "(".$sql.") AND (filename IS NULL OR filename = '') AND (url IS NULL OR url = '')";
+bib_new_list();
+bib_add_sql($sql);
+bib_sort_by("year", "desc");
+bib_display_list_ul("view.php?key=%k");
 ?>
 
 <h3>Papers with 'filename' but no files:</h3>
 
 <?php
-$keys = bib_db_query("SELECT key FROM bib_items WHERE NOT(filename IS NULL OR filename = '')");
-if (count($keys)>0) {
-	echo "<ul>\n";
-	foreach ($keys as $key) {
-		$item = bib_fetch_item($key);
-		$files = bib_get_item_files($item);
-		if (count($files) == 0 || (count($files) == 1 && $files[0]["ext"]="bib")) {
-			echo "<li>\n";
-			bib_display_item($item);
-			echo "[".$item["filename"]."]\n";
-		}
+$items = bib_db_query("SELECT key,filename,author,title FROM bib_items WHERE NOT(filename IS NULL OR filename = '')");
+echo "<ul>\n";
+foreach ($items as $item) {
+	$files = bib_get_item_files($item, false);
+	if (count($files) == 0) {
+		echo "<li>\n";
+		bib_display_item($item);
+		echo "[".$item["filename"]."]\n";
 	}
-	echo "</ul>\n";
-} else echo "&lt;none&gt;\n";
+}
+echo "</ul>\n";
+?>
+
+<h3>Marta/Gethin/Dave papers with no 'abstract':</h3>
+
+<?php
+$authors = array("marta", "gethin", "dave", "mark");
+$sql = implode(" OR ", preg_replace("/.+/", "(position('|$0|' in cats)>0)", $authors));
+$sql = "(".$sql.") AND (abstract IS NULL OR abstract = '')";
+bib_new_list();
+bib_add_sql($sql);
+bib_sort_by("year", "desc");
+bib_display_list_ul("view.php?key=%k");
 ?>
 
 <?php require 'footer.php'; ?>
