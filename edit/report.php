@@ -38,9 +38,10 @@ echo "<ul>\n";
 foreach ($items as $item) {
 	$files = bib_get_item_files($item, false);
 	if (count($files) == 0) {
-		echo "<li>\n";
-		bib_display_item($item);
-		echo "[".$item["filename"]."]\n";
+		echo "<li> <b>[".$item["key"]."]</b> ".$item["author"];
+		echo ". <a href=\"view.php?key=".$item["key"]."\">".$item["title"]."</a>";
+		echo ". [".$item["filename"]."]\n";
+		echo " [<a href=\"edit.php?key=".$item["key"]."\">edit</a>]\n";
 	}
 }
 echo "</ul>\n";
