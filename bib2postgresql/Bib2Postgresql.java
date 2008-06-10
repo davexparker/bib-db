@@ -120,6 +120,7 @@ public class Bib2Postgresql
 					s = (bs != null) ? bs.getContent() : "";
 					s = s.replaceAll("\\{", "");
 					s = s.replaceAll("\\}", "");
+					s = s.replaceAll("--", "-");
 					// Author
 					if (i == 1) {
 						String tokens[] = s.split("\\s+and\\s+");
