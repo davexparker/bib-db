@@ -773,7 +773,7 @@ function bib_display_item_detailed($item, $link = NULL, $indent = 0)
 		echo "</td>\n</tr>\n";
 		echo "\n<tr class=\"bibbox-row-alt".($table_alt = 3 - $table_alt)."\">\n<td class=\"bibbox-td\">\n";
 		echo "<div class=\"bibbox-abstract\">\n";
-		if ($item["type"] == "book")
+		if ($item["type"] == "book" || $item["type"] == "inbook")
 			if (file_exists($bib_images_dir."/".$item["key"].".gif"))
 				echo "<img style=\"border:0;float:left;margin:0px 10px 10px 0px;\" src=\"".$bib_images_url."/".$item["key"].".gif\" alt=\"Front cover\">\n";
 		echo "<b>Abstract.</b>\n".$item["abstract"]."\n";
