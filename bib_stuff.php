@@ -775,11 +775,11 @@ function bib_display_item_detailed($item, $link = NULL, $indent = 0)
 		echo "<div class=\"bibbox-abstract\">\n";
 		if ($item["type"] == "book" || $item["type"] == "inbook")
 			if (file_exists($bib_images_dir."/".$item["key"].".gif"))
-				echo "<img style=\"border:0;float:left;margin:0px 10px 10px 0px;\" src=\"".$bib_images_url."/".$item["key"].".gif\" alt=\"Front cover\">\n";
+				echo "<img style=\"border:0;float:left;margin:0px 10px 10px 10px;\" src=\"".$bib_images_url."/".$item["key"].".gif\" alt=\"Front cover\">\n";
 			if (file_exists($bib_images_dir."/".$item["key"].".jpg"))
-				echo "<img style=\"border:0;float:left;margin:0px 10px 10px 0px;\" src=\"".$bib_images_url."/".$item["key"].".jpg\" alt=\"Front cover\">\n";
+				echo "<img style=\"border:0;float:left;margin:0px 10px 10px 10px;\" src=\"".$bib_images_url."/".$item["key"].".jpg\" alt=\"Front cover\">\n";
 			if (file_exists($bib_images_dir."/".$item["key"].".png"))
-				echo "<img style=\"border:0;float:left;margin:0px 10px 10px 0px;\" src=\"".$bib_images_url."/".$item["key"].".png\" alt=\"Front cover\">\n";
+				echo "<img style=\"border:0;float:left;margin:0px 10px 10px 10px;\" src=\"".$bib_images_url."/".$item["key"].".png\" alt=\"Front cover\">\n";
 		echo "<b>Abstract.</b>\n".$item["abstract"]."\n";
 		echo "</div>\n";
 	}
