@@ -1,4 +1,4 @@
-AuthUserFile /home/dxp/prism-www/wiki/.htpasswd
+AuthUserFile /home/dxp/qav-www/wiki/.htpasswd
 AuthType Basic
 AuthName "Protected"
 <Limit GET POST>
