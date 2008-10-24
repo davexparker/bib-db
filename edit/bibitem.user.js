@@ -12,7 +12,7 @@ if (nodes.snapshotLength > 0) {
 	nodes = document.evaluate("//span[@class='bib-files']", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 	if (nodes.snapshotLength > 0) {
 		var node = nodes.snapshotItem(0);
-		var parent = node.parentNode;
+		parent = node.parentNode;
 		var before = node.nextSibling;
 		span = document.createElement('span');
 		span.appendChild(document.createTextNode("["));
