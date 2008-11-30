@@ -1000,7 +1000,10 @@ function bib_sort_links($search = "")
 	echo "sort=date\">date</a>,\n";
 	echo "<a href=\"".$_SERVER["PHP_SELF"]."?";
 	if ($search) echo "search=$search&amp;";
-	echo "sort=type\">type</a>\n";
+	echo "sort=type\">type</a>,\n";
+	echo "<a href=\"".$_SERVER["PHP_SELF"]."?";
+	if ($search) echo "search=$search&amp;";
+	echo "sort=title\">title</a>\n";
 	echo "</p>\n";
 
 	return $sort;
