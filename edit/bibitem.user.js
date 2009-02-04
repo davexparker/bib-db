@@ -3,7 +3,7 @@
 // @include       *bibitem.php*
 // ==/UserScript==
 
-var edit_url = "http://www.prismmodelchecker.org/bib/edit.php?key=";
+var edit_url = "http://qav.comlab.ox.ac.uk/bib/edit.php?key=";
 
 var nodes = document.evaluate("//span[@class='bib-key']", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 if (nodes.snapshotLength > 0) {
