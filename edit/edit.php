@@ -253,7 +253,61 @@ default:
 
 <tr><td>&nbsp;</td><td></td></tr>
 
+<tr><td valign="top"><b>Categories: </b></td><td>
+<ul>
+
+<li>
+<b>author</b> - used to generate per-person publication lists<br><br>
+<table border="1"><tr><td valign="top">
 <?php
+	foreach (bib_get_cat_names_for_group("author") as $cat) {
+		echo "<input type=\"checkbox\" name=\"cats[]\" value=\"".$cat["name"]."\"";
+		if ($item["cats"]) if (in_array($cat["name"], $item["cats"])) echo " checked";
+		echo "> <b>".$cat["name"]."</b> (".$cat["description"].")<br>\n";
+	}
+?>
+</td></tr></table><br>
+
+<li>
+<b>project</b> - assign to current project(s)<br><br>
+<table border="1"><tr><td valign="top">
+<?php
+	foreach (bib_get_cat_names_for_group("project") as $cat) {
+		echo "<input type=\"checkbox\" name=\"cats[]\" value=\"".$cat["name"]."\"";
+		if ($item["cats"]) if (in_array($cat["name"], $item["cats"])) echo " checked";
+		echo "> <b>".$cat["name"]."</b> (".$cat["description"].")<br>\n";
+	}
+?>
+</td></tr></table><br>
+
+<li>
+<b>prism</b>/<b>prismbib</b> - internal <span style="color:red;">OR</span> external PRISM-related publication<br><br>
+<table border="1"><tr><td valign="top">
+<?php
+	foreach (bib_get_cat_names_for_group("website") as $cat) {
+		echo "<input type=\"checkbox\" name=\"cats[]\" value=\"".$cat["name"]."\"";
+		if ($item["cats"]) if (in_array($cat["name"], $item["cats"])) echo " checked";
+		echo "> <b>".$cat["name"]."</b> (".$cat["description"].")<br>\n";
+	}
+?>
+</td></tr></table><br>
+
+<li>
+for external (<b>prismbib</b>) PRISM publications <span style="color:red;">only</span>, type of paper<br><br>
+<table border="1"><tr><td valign="top">
+<?php
+	foreach (bib_get_cat_names_for_group("prismbib") as $cat) {
+		echo "<input type=\"checkbox\" name=\"cats[]\" value=\"".$cat["name"]."\"";
+		if ($item["cats"]) if (in_array($cat["name"], $item["cats"])) echo " checked";
+		echo "> <b>".$cat["name"]."</b> (".$cat["description"].")<br>\n";
+	}
+?>
+</td></tr></table><br>
+
+</ul>
+</td></tr>
+
+<?php /*
 	echo "<tr><td valign=\"top\"><b>Categories: </b></td><td>\n";
 	echo "<table border=\"1\">\n";
 	foreach (bib_get_cat_groups() as $group) {
@@ -267,7 +321,7 @@ default:
 	}
 	echo "</table>\n";
 	echo "</td></tr>\n";
-?>
+*/ ?>
 
 </table>
 
