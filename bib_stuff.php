@@ -1001,11 +1001,11 @@ function bib_sort_links($search = "", $subject = false)
 	$first = true;
 	foreach ($sort_list as $sort_type) {
 		if ($first) $first = false; else echo ", ";
-		if ($sort_type == $sort) echo "<b>";
+		if ($sort_type == $sort) echo "<span class=\"bib-highlight\">";
 		echo "<a href=\"".$_SERVER["PHP_SELF"]."?";
 		if ($search) echo "search=$search&amp;";
 		echo "sort=$sort_type\">$sort_type</a>";
-		if ($sort_type == $sort) echo "</b>";
+		if ($sort_type == $sort) echo "</span>";
 	}
 	echo "</p>\n";
 
