@@ -985,8 +985,9 @@ function bib_search_box()
 
 // Add links to do sorting above the bib item list
 // (optionally takes in search query to add to links)
+// (specify whether to also include "subject" sort option)
 
-function bib_sort_links($search = "")
+function bib_sort_links($search = "", $subject = false)
 {
 	// get sort index (default is date)
 	$sort = extract_var_from_post_get("sort");
@@ -995,15 +996,17 @@ function bib_sort_links($search = "")
 	// display links
 	echo "<p class=\"biblist-sort-links\">\n";
 	echo "<b>Sort by: </b>";
-	echo "<a href=\"".$_SERVER["PHP_SELF"]."?";
-	if ($search) echo "search=$search&amp;";
-	echo "sort=date\">date</a>,\n";
-	echo "<a href=\"".$_SERVER["PHP_SELF"]."?";
-	if ($search) echo "search=$search&amp;";
-	echo "sort=type\">type</a>,\n";
-	echo "<a href=\"".$_SERVER["PHP_SELF"]."?";
-	if ($search) echo "search=$search&amp;";
-	echo "sort=title\">title</a>\n";
+	$sort_list = array("date", "type", "title");
+	if ($subject) $sort_list[] = "subject";
+	$first = true;
+	foreach ($sort_list as $sort_type) {
+		if ($first) $first = false; else echo ", ";
+		if ($sort_type == $sort) echo "<b>";
+		echo "<a href=\"".$_SERVER["PHP_SELF"]."?";
+		if ($search) echo "search=$search&amp;";
+		echo "sort=$sort_type\">$sort_type</a>";
+		if ($sort_type == $sort) echo "</b>";
+	}
 	echo "</p>\n";
 
 	return $sort;
