@@ -97,6 +97,15 @@ function extract_key_from_post_get($field = "key")
 
 //-----------------------------------------------------------------------------
 
+// Check validity of a key
+
+function is_key_valid($key)
+{
+	return (preg_match("/^[A-Za-z0-9_\-+]+$/", $key) === 1);
+}
+
+//-----------------------------------------------------------------------------
+
 // Log an error message to the error log.
 // If $dbconn is provided, last DB error will also be logged.
 
@@ -360,7 +369,7 @@ function bib_build_search_info($search, $fields)
 function bib_fetch_item($key)
 {
 	// check key is valid
-	if (preg_match("/^[A-Za-z0-9_\-+]+$/", $key) != 1) {
+	if (!is_key_valid($key)) {
 		bib_log_error("Cannot fetch item \"$key\" - key is invalid");
 		return NULL;
 	}
@@ -387,7 +396,7 @@ function bib_add_item($key, $type)
 	global $bib_item_types;
 	
 	// check key is valid
-	if (preg_match("/^[A-Za-z0-9_\-+]+$/", $key) != 1) {
+	if (!is_key_valid($key)) {
 		return "Key \"$key\" is invalid";
 	}
 	
@@ -413,7 +422,7 @@ function bib_add_item($key, $type)
 function bib_delete_item($key)
 {
 	// check key is valid
-	if (preg_match("/^[A-Za-z0-9_\-+]+$/", $key) != 1) {
+	if (!is_key_valid($key)) {
 		return "Key \"$key\" is invalid";
 	}
 	
@@ -431,10 +440,10 @@ function bib_delete_item($key)
 function bib_rename_item($key, $newkey)
 {
 	// check keys are valid
-	if (preg_match("/^[A-Za-z0-9_\-+]+$/", $key) != 1) {
+	if (!is_key_valid($key)) {
 		return "Key \"$key\" is invalid";
 	}
-	if (preg_match("/^[A-Za-z0-9_\-+]+$/", $newkey) != 1) {
+	if (!is_key_valid($newkey)) {
 		return "New key \"$newkey\" is invalid";
 	}
 	
@@ -463,7 +472,7 @@ function bib_update_item($item)
 	if (!array_key_exists("key", $item)) {
 		return "No key supplied";
 	}
-	if (preg_match("/^[A-Za-z0-9_\-+]+$/", $item["key"]) != 1) {
+	if (!is_key_valid($item["key"])) {
 		return "Key \"".$item["key"]."\" is invalid";
 	}
 	
