@@ -994,19 +994,20 @@ function bib_search_box()
 
 // Add links to do sorting above the bib item list
 // (optionally takes in search query to add to links)
-// (specify whether to also include "subject" sort option)
+// (optionally, specify extra sort indices)
+// (optionally, specify default sort index)
 
-function bib_sort_links($search = "", $subject = false)
+function bib_sort_links($search = "", $extra = NULL, $default = "date")
 {
-	// get sort index (default is date)
+	// get sort index (default is date - see arg list above)
 	$sort = extract_var_from_post_get("sort");
-	if ($sort === NULL || $sort == "") $sort = "date";
+	if ($sort === NULL || $sort == "") $sort = $default;
 	
 	// display links
 	echo "<p class=\"biblist-sort-links\">\n";
 	echo "<b>Sort by: </b>";
 	$sort_list = array("date", "type", "title");
-	if ($subject) $sort_list[] = "subject";
+	if ($extra) $sort_list = array_merge($sort_list, $extra);
 	$first = true;
 	foreach ($sort_list as $sort_type) {
 		if ($first) $first = false; else echo ", ";
