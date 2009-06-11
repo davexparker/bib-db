@@ -855,14 +855,14 @@ function bib_new_list($search = NULL, $fields = NULL)
 
 // Create a new section within the current list of bibliography items.
 
-function bib_new_section($header = "")
+function bib_new_section($header = "", $headerlink = "")
 {
 	global $bib_list_sections;
 	
 	// initialise section:
 	// select is "false" - section is initially empty
 	// list of sort operations is empty
-	$section = array("header"=>$header, "select"=>"false", "sortby_list"=>array());
+	$section = array("header"=>$header, "headerlink"=>$headerlink, "select"=>"false", "sortby_list"=>array());
 	$bib_list_sections []= $section;
 }
 
@@ -1140,6 +1140,9 @@ function bib_display_list($link = "", $block_start = "", $block_end = "", $item_
 		//if ($section["header"] || $section["select"] != "false") {
 		if ($section["select"] != "false") {
 			echo "<div class=\"biblist-section\">\n\n";
+			if ($section["headerlink"]) {
+				echo "<a name=\"".$section["headerlink"]."\"></a>\n";
+			}
 			if ($section["header"]) {
 				echo "<div class=\"biblist-section-header\">";
 				echo $section["header"];
@@ -1221,6 +1224,7 @@ function bib_display_sect_rec($dbconn, $sortby_list, $depth = 0, $where = "", $o
 		// loop over each value
 		foreach ($result as $pair) {
 			// print header
+			echo "<a name=\"".$pair[1]."\"></a>\n";
 			echo "<div class=\"biblist-block-header\">";
 			echo preg_replace("/%s/", htmlentities($pair[1]), $sortby["header"]);
 			echo "</div>\n\n";
