@@ -27,7 +27,7 @@ Add a suffix to distinguish papers if necessary, e.g. "cav06symmetry".
 <form enctype="multipart/form-data" action="upload-paper.php" method="POST">
 
     <!-- MAX_FILE_SIZE must precede the file input field -->
-    <input type="hidden" name="MAX_FILE_SIZE" value="30000">
+    <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
     
 	<table>
 	<tr><td><b>Name (e.g. cav06.pdf): </b></td><td>
@@ -52,14 +52,14 @@ Add a suffix to distinguish papers if necessary, e.g. "cav06symmetry".
 		if (is_uploaded_file($_FILES['paperfile']['tmp_name'])) {
 			echo "<p>Attempting to upload ".$_FILES['paperfile']['name']." to server...</p>\n";
 			if (!move_uploaded_file($_FILES['paperfile']['tmp_name'], "/home/dxp/papers/".$name)) {
-				echo "<p><font color=\"#cc0000\">[Error: Could not upload file]</font></p>\n";
+				echo "<p><font color=\"#cc0000\">[Error: Could not upload file (error code ".$_FILES['paperfile']['error'].")]</font></p>\n";
 			}
 			else {
 				echo "<p>Upload successful. File is <a href=\"http://qav.comlab.ox.ac.uk/papers/$name\">here</a>.</p>";
 			}
 		}
 		else {
-			echo "<p><font color=\"#cc0000\">[Error in file upload]</font></p>\n";
+			echo "<p><font color=\"#cc0000\">[Error: Could not upload file (error code ".$_FILES['paperfile']['error'].")]</font></p>\n";
 		}
 	}
 }
