@@ -51,7 +51,7 @@ Add a suffix to distinguish papers if necessary, e.g. "cav06symmetry".
 	} else {
 		if (is_uploaded_file($_FILES['paperfile']['tmp_name'])) {
 			echo "<p>Attempting to upload ".$_FILES['paperfile']['name']." to server...</p>\n";
-			if (!move_uploaded_file($_FILES['paperfile']['tmp_name'], "/home/dxp/doc/bib/".$name)) {
+			if (!move_uploaded_file($_FILES['paperfile']['tmp_name'], "/home/dxp/papers/".$name)) {
 				echo "<p><font color=\"#cc0000\">[Error: Could not upload file]</font></p>\n";
 			}
 			else {
