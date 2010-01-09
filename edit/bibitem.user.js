@@ -9,7 +9,8 @@ var nodes = document.evaluate("//span[@class='bib-key']", document, null, XPathR
 if (nodes.snapshotLength > 0) {
 	var key = nodes.snapshotItem(0).childNodes[0].data;
 	key = key.substring(1, key.length-1);
-	nodes = document.evaluate("//span[@class='bib-files']", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+	var nodes = document.evaluate("//span[@class='bib-files']", 
+document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 	if (nodes.snapshotLength > 0) {
 		var node = nodes.snapshotItem(0);
 		parent = node.parentNode;
