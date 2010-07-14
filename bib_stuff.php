@@ -758,7 +758,8 @@ function bib_display_item_detailed($item, $link = NULL, $indent = 0)
 	if (count($notes) > 0) {
 		echo "<br><br><b>Notes:</b>\n";
 		foreach ($notes as $note) {
-		echo $note."\n";
+			echo $note."\n";
+		}
 	}
 	
 	/*if (array_key_exists("links", $item)) if ($item["links"]) {
