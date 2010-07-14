@@ -735,10 +735,10 @@ function bib_display_item_detailed($item, $link = NULL, $indent = 0)
 			if (array_key_exists("filesize", $item_file)) if ($item_file["filesize"]) echo "(".$item_file["filesize"].") ";
 			echo "\n";
 		}
+		echo "</div>";
 	}
 	
 	$notes = array();
-	
 	if (array_key_exists("publisher", $item)) if (substr_count($item["publisher"], "Springer")) {
 		$notes[] = "The original publication is available at <a href=\"http://www.springerlink.com/\">www.springerlink.com</a>.";
 	}
@@ -746,20 +746,21 @@ function bib_display_item_detailed($item, $link = NULL, $indent = 0)
 	    || (array_key_exists("journal", $item) && (strcasecmp($item["journal"], "Electronic Notes in Theoretical Computer Science") === 0 || strcasecmp($item["journal"], "ENTCS") === 0))) {
 		$notes[] = "ENTCS is available at <a href=\"http://www.sciencedirect.com/science/journal/15710661\">www.sciencedirect.com/science/journal/15710661</a>.";
 	}
-	echo "</div>";
-	
 	if (array_key_exists("links", $item)) if ($item["links"]) {
 		// replace citations of form [] with links
 		$thispage = $_SERVER["PHP_SELF"];
 		$item["links"] = preg_replace("/\[([A-Za-z0-9_\-+]+)\]/", "[<a href=\"$thispage?key=\\1\">\\1</a>]", $item["links"]);
 		$notes[] = $item["links"];
 	}
-	
 	if (count($notes) > 0) {
+		echo "</td>\n</tr>\n";
+		echo "\n<tr class=\"bibbox-row-alt".($table_alt = 3 - $table_alt)."\">\n<td class=\"bibbox-td\">\n";
+		echo "<div class=\"bibbox-notes\">\n";
 		echo "<br><br><b>Notes:</b>\n";
 		foreach ($notes as $note) {
 			echo $note."\n";
 		}
+		echo "</div>";
 	}
 	
 	/*if (array_key_exists("links", $item)) if ($item["links"]) {
