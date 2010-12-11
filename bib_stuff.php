@@ -337,7 +337,7 @@ function bib_build_search_info($search, $fields)
 		// build regexp to search for *any* of these words (in html)
 		$bib_list_search_preg = "";
 		foreach ($bib_list_search_words as $word)
-			$bib_list_search_preg = ($bib_list_search_preg==""?"":$bib_list_search_preg."|").preg_quote(htmlentities($word), "/");
+			$bib_list_search_preg = ($bib_list_search_preg==""?"":$bib_list_search_preg."|").preg_quote(htmlentities($word, ENT_COMPAT, "UTF-8"), "/");
 		// build sql query to search for *all* of these words
 		$bib_list_search_sql = "";
 		foreach ($bib_list_search_words as $word) {
@@ -546,9 +546,9 @@ function bib_display_item($item, $link = NULL, $indent = 0)
 	// also convert months to month names
 	foreach ($item as $index => $val) {
 		if ($index !== "month") {
-			if (is_string($val)) $item[$index] = htmlentities($val);
+			if (is_string($val)) $item[$index] = htmlentities($val, ENT_COMPAT, "UTF-8");
 		} else {
-			$item[$index] = htmlentities($bib_month_names[$val]);
+			$item[$index] = htmlentities($bib_month_names[$val], ENT_COMPAT, "UTF-8");
 		}
 	}
 	
@@ -780,11 +780,11 @@ function bib_display_item_detailed($item, $link = NULL, $indent = 0)
 	echo "<b>Links:</b>\n";
 	$title = ($item["type"] != "inbook") ? $item["title"] : $item["chapter"];
 	$url = "http://www.google.com/search?q=\"".rawurlencode($title)."\"&ie=UTF-8&oe=UTF-8&hl=en&btnG=Search";
-	echo "[<a href=\"".htmlentities($url)."\">Google</a>]\n";
+	echo "[<a href=\"".htmlentities($url, ENT_COMPAT, "UTF-8")."\">Google</a>]\n";
 	$url = "http://scholar.google.com/scholar?q=\"".rawurlencode($title)."\"&ie=UTF-8&oe=UTF-8&hl=en&btnG=Search";
-	echo "[<a href=\"".htmlentities($url)."\">Google Scholar</a>]\n";
+	echo "[<a href=\"".htmlentities($url, ENT_COMPAT, "UTF-8")."\">Google Scholar</a>]\n";
 	$url = "http://www.google.com/search?q=site:citeseer.ist.psu.edu+".rawurlencode($title)."&ie=UTF-8&oe=UTF-8&hl=en&btnG=Search";
-	echo "[<a href=\"".htmlentities($url)."\">CiteSeer</a>]\n";
+	echo "[<a href=\"".htmlentities($url, ENT_COMPAT, "UTF-8")."\">CiteSeer</a>]\n";
 	echo "</div>";
 	
 	if (array_key_exists("url", $item)) if ($item["url"]) {
@@ -792,7 +792,7 @@ function bib_display_item_detailed($item, $link = NULL, $indent = 0)
 		echo "\n<tr class=\"bibbox-row-alt".($table_alt = 3 - $table_alt)."\">\n<td class=\"bibbox-td\">\n";
 		echo "<div class=\"bibbox-url\">\n";
 		echo "<b>Available from:</b> \n";
-		echo "<a href=\"".htmlentities($item["url"])."\">".htmlentities($item["url"])."</a>\n";
+		echo "<a href=\"".htmlentities($item["url"], ENT_COMPAT, "UTF-8")."\">".htmlentities($item["url"], ENT_COMPAT, "UTF-8")."</a>\n";
 		echo "</div>";
 	}
 	
@@ -1001,7 +1001,7 @@ function bib_search_box()
 	echo "<form method=\"get\" action=\"".$_SERVER["PHP_SELF"]."\">\n";
 	echo "<input type=\"submit\" value=\"Search\">\n&nbsp;\n";
 	echo "<input type=\"text\" size=\"30\" name=\"search\" value=\"";
-	if ($search != NULL) echo htmlentities(trim($search));
+	if ($search != NULL) echo htmlentities(trim($search), ENT_COMPAT, "UTF-8");
 	echo "\">\n</form>\n";
 	echo "</div>\n\n";
 	
@@ -1134,10 +1134,10 @@ function bib_display_list($link = "", $block_start = "", $block_end = "", $item_
 		}
 		echo "<div class=\"biblist-search-results\">\n";
 		if ($count == 0) {
-			echo "<p>No matches for <b>".htmlentities($bib_list_search_string)."</b>.</p>\n\n";
+			echo "<p>No matches for <b>".htmlentities($bib_list_search_string, ENT_COMPAT, "UTF-8")."</b>.</p>\n\n";
 		}
 		else {
-			echo "<p><b>".$count."</b> match".($count==1?"":"es")." for <b>".htmlentities($bib_list_search_string)."</b>:</p>\n";
+			echo "<p><b>".$count."</b> match".($count==1?"":"es")." for <b>".htmlentities($bib_list_search_string, ENT_COMPAT, "UTF-8")."</b>:</p>\n";
 		}
 		echo "</div>\n\n";
 	}
@@ -1244,7 +1244,7 @@ function bib_display_sect_rec($dbconn, $sortby_list, $depth = 0, $where = "", $o
 			// print header
 			echo "<a name=\"".$pair[1]."\"></a>\n";
 			echo "<div class=\"biblist-block-header\">";
-			echo preg_replace("/%s/", htmlentities($pair[1]), $sortby["header"]);
+			echo preg_replace("/%s/", htmlentities($pair[1], ENT_COMPAT, "UTF-8"), $sortby["header"]);
 			echo "</div>\n\n";
 			// recurse
 			$new_where = ($where==""?"":$where." AND ").$sortby["field"]."='".$pair[0]."'";
