@@ -304,6 +304,18 @@ for external (<b>prismbib</b>) PRISM publications <span style="color:red;">only<
 ?>
 </td></tr></table><br>
 
+<li>
+<b>xold-project</b> - assign to old project(s)<br><br>
+<table border="1"><tr><td valign="top">
+<?php
+	foreach (bib_get_cat_names_for_group("x-oldproject") as $cat) {
+		echo "<input type=\"checkbox\" name=\"cats[]\" value=\"".$cat["name"]."\"";
+		if ($item["cats"]) if (in_array($cat["name"], $item["cats"])) echo " checked";
+		echo "> <b>".$cat["name"]."</b> (".$cat["description"].")<br>\n";
+	}
+?>
+</td></tr></table><br>
+
 </ul>
 </td></tr>
 
