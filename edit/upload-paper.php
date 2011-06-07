@@ -12,7 +12,7 @@ if (!array_key_exists("paperfile", $_FILES)) {
 
 <p>
 Use this form to upload a paper to
-<a href="http://qav.cs.ox.ac.uk/papers/">this area</a> of the QAV server.
+<a href="http://qav.comlab.ox.ac.uk/papers/">this area</a> of the QAV server.
 </p>
 
 <p>
@@ -55,7 +55,7 @@ Add a suffix to distinguish papers if necessary, e.g. "cav06symmetry".
 				echo "<p><font color=\"#cc0000\">[Error: Could not upload file (error code ".$_FILES['paperfile']['error'].")]</font></p>\n";
 			}
 			else {
-				echo "<p>Upload successful. File is <a href=\"http://qav.cs.ox.ac.uk/papers/$name\">here</a>.</p>";
+				echo "<p>Upload successful. File is <a href=\"http://qav.comlab.ox.ac.uk/papers/$name\">here</a>.</p>";
 			}
 		}
 		else {
