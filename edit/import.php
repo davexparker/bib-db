@@ -16,9 +16,9 @@ Use this form to import to the database from bibtex.
 
 <p>
 See e.g.
-<a href="http://qav.comlab.ox.ac.uk/bibtex/.Article">.Article</a> and
-<a href="http://qav.comlab.ox.ac.uk/bibtex/.InProceedings">.InProceedings</a> for template bibtex files.
-All existing bibtex files  are <a href="http://qav.comlab.ox.ac.uk/bibtex/">here</a>.
+<a href="http://qav.cs.ox.ac.uk/bibtex/.Article">.Article</a> and
+<a href="http://qav.cs.ox.ac.uk/bibtex/.InProceedings">.InProceedings</a> for template bibtex files.
+All existing bibtex files  are <a href="http://qav.cs.ox.ac.uk/bibtex/">here</a>.
 </p>
 
 <p>

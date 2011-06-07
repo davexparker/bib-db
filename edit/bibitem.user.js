@@ -3,7 +3,7 @@
 // @include       *bibitem.php*
 // ==/UserScript==
 
-var edit_url = "http://qav.comlab.ox.ac.uk/bib/edit.php?key=";
+var edit_url = "http://qav.cs.ox.ac.uk/bib/edit.php?key=";
 
 var nodes = document.evaluate("//span[@class='bib-key']", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 if (nodes.snapshotLength > 0) {
@@ -13,7 +13,6 @@ if (nodes.snapshotLength > 0) {
 document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 	if (nodes.snapshotLength > 0) {
 		var node = nodes.snapshotItem(0);
-		parent = node.parentNode;
 		var before = node.nextSibling;
 		span = document.createElement('span');
 		span.appendChild(document.createTextNode("["));
@@ -22,6 +21,6 @@ document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 		link.appendChild(document.createTextNode("edit"));
 		span.appendChild(link);
 		span.appendChild(document.createTextNode("]"));
-		parent.insertBefore(span, before);
+		node.parentNode.insertBefore(span, before);
 	}
 }
