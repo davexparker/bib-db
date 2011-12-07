@@ -1,5 +1,9 @@
 <?php $title="Add"; require 'header.php'; ?>
 
+<p>
+Please use bibtex "Alpha"-style citation keys (e.g. KNP09a or ABC+11).
+</p>
+
 <?php
 
 require '../bib_stuff.php';

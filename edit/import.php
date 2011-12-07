@@ -22,7 +22,7 @@ All existing bibtex files  are <a href="http://qav.cs.ox.ac.uk/bibtex/">here</a>
 </p>
 
 <p>
-Please use bibtex "Alpha"-style citation keys (e.g. KNP09a)
+Please use bibtex "Alpha"-style citation keys (e.g. KNP09a or ABC+11)
 and make sure that the key in the bibtex file matches the one you provide below.
 </p>
 
