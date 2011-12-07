@@ -18,7 +18,7 @@ bib_display_list_ul("view.php?key=%k");
 
 <?php
 // papers with some category (that is not 'prismbib')
-$sql = "length(cats)>0";// AND ((position('|prismbib|' in cats)=0)";
+$sql = "length(cats)>0 AND (position('|prismbib|' in cats)=0)";
 // and that are not conference proceedings, books or msc theses
 $sql = "(".$sql.") AND (bib_items.type != 'proceedings' AND bib_items.type != 'book' AND bib_items.type != 'mastersthesis')";
 // and with missing filename/url
