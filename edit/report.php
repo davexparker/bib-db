@@ -8,6 +8,7 @@
 
 <?php
 bib_new_list();
+bib_add_sql("(bib_items.type != 'techreport'");
 bib_add_sql("((position('M. Kwiatkowska' in author)>0) AND ((position('|marta|' in cats)=0) OR (cats IS NULL)))");
 bib_add_sql("((position('G. Norman' in author)>0) AND ((position('|gethin|' in cats)=0) OR (cats IS NULL)))");
 bib_add_sql("((position('D. Parker' in author)>0) AND ((position('|dave|' in cats)=0) OR (cats IS NULL)))");
