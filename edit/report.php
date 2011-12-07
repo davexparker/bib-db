@@ -12,7 +12,6 @@ bib_add_sql("(bib_items.type != 'techreport'");
 bib_add_sql("((position('M. Kwiatkowska' in author)>0) AND ((position('|marta|' in cats)=0) OR (cats IS NULL)))");
 bib_add_sql("((position('G. Norman' in author)>0) AND ((position('|gethin|' in cats)=0) OR (cats IS NULL)))");
 bib_add_sql("((position('D. Parker' in author)>0) AND ((position('|dave|' in cats)=0) OR (cats IS NULL)))");
-bib_add_sql("((position('M. Kattenbelt' in author)>0) AND ((position('|mark|' in cats)=0) OR (cats IS NULL)))");
 bib_display_list_ul("view.php?key=%k");
 ?>
 
@@ -20,7 +19,7 @@ bib_display_list_ul("view.php?key=%k");
 
 <?php
 // papers with some category (that is not 'prismbib')
-$sql = "length(cats)>0 AND cats != '|prismbib|'";
+$sql = "length(cats)>0 AND ((position('|prismbib|' in cats)=0)";
 // and that are not conference proceedings, books or msc theses
 $sql = "(".$sql.") AND (bib_items.type != 'proceedings' AND bib_items.type != 'book' AND bib_items.type != 'mastersthesis')";
 // and with missing filename/url
@@ -51,8 +50,11 @@ echo "</ul>\n";
 <h3>Marta/Gethin/Dave papers with no 'abstract':</h3>
 
 <?php
-$authors = array("marta", "gethin", "dave", "mark");
+$authors = array("marta", "gethin", "dave");
 $sql = implode(" OR ", preg_replace("/.+/", "(position('|$0|' in cats)>0)", $authors));
+// and that are not conference proceedings, books
+$sql = "(".$sql.") AND (bib_items.type != 'proceedings' AND bib_items.type != 'book')";
+// with no abstract...
 $sql = "(".$sql.") AND (abstract IS NULL OR abstract = '')";
 bib_new_list();
 bib_add_sql($sql);
