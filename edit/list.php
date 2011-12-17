@@ -4,7 +4,7 @@
 
 require '../bib_stuff.php';
 
-$bib_list_item_extra_links = array("edit" => "edit.php?key=%k", "delete" => "delete.php?key=%k");
+$bib_list_item_extra_links = array("view" => "view.php?key=%k", "edit" => "edit.php?key=%k", "delete" => "delete.php?key=%k");
 
 $search = bib_search_box();
 
