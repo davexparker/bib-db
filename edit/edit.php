@@ -253,6 +253,7 @@ default:
 
 <tr><td>&nbsp;</td><td></td></tr>
 
+<!--
 <tr><td valign="top"><b>Categories: </b></td><td>
 <ul>
 
@@ -318,8 +319,9 @@ for external (<b>prismbib</b>) PRISM publications <span style="color:red;">only<
 
 </ul>
 </td></tr>
+-->
 
-<?php /*
+<?php
 	echo "<tr><td valign=\"top\"><b>Categories: </b></td><td>\n";
 	echo "<table border=\"1\">\n";
 	foreach (bib_get_cat_groups() as $group) {
@@ -327,13 +329,13 @@ for external (<b>prismbib</b>) PRISM publications <span style="color:red;">only<
 		foreach (bib_get_cat_names_for_group($group) as $cat) {
 			echo "<input type=\"checkbox\" name=\"cats[]\" value=\"".$cat["name"]."\"";
 			if ($item["cats"]) if (in_array($cat["name"], $item["cats"])) echo " checked";
-			echo "> <b>".$cat["name"]."</b> (".$cat["description"].")<br>\n";
+			echo "> ".$cat["name"]."&nbsp;\n";
 		}
 		echo "</td></tr>\n";
 	}
 	echo "</table>\n";
 	echo "</td></tr>\n";
-*/ ?>
+?>
 
 </table>
 
