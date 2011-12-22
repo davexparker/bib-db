@@ -7,26 +7,27 @@
 // Location of php file containing database connection details.
 // Create your own file based on the example file 'connect.php' in this directory.
 // Must be readable at least by the user that the web server runs as ('nobody', 'apache', '48', etc.)
-
-$bib_connect_file = "/home/staff/dxp/bib-db/connect.php";
+$bib_connect_file = "/home/dxp/bib-db/connect.php";
 
 // Location of your error log.
 // To avoid exposing the innards of this database/code to the web, most errors are just silently logged.
 // Must exist and be be writeable at least by the user that the web server runs as ('nobody', 'apache', '48', etc.)
+$bib_error_file = "/home/dxp/bib-db/errorlog";
 
-$bib_error_file = "/home/staff/dxp/bib-db/errorlog";
+// Location of bib2postgresql dir - need for edit/import.php
+$bib_bib2postgresql_dir = "/home/dxp/bib-db";
 
 // Default location for publication files (pdf, ps, etc.)
 //$bib_files_dir = "/export/htdocs/website/research/labs/modelling_and_analysis_of_systems/papers";
-$bib_files_dir = "/home/staff/dxp/public_html/papers";
-$bib_files_url = "/~dxp/papers";
+$bib_files_dir = "/home/dxp/papers";
+$bib_files_url = "/papers";
 
 // Default location for bibtex files
-$bib_bibtex_dir = "/home/staff/dxp/doc/bib";
-$bib_bibtex_url = "/~dxp/bibtex";
+$bib_bibtex_dir = "/home/dxp/doc/bib";
+$bib_bibtex_url = "/bibtex";
 
 // Default location for image files
-$bib_images_dir = "/home/staff/dxp/public_html/images";
-$bib_images_url = "/~dxp/images";
+$bib_images_dir = "/home/dxp/doc/bib/images";
+$bib_images_url = "/images";
 
 ?>
