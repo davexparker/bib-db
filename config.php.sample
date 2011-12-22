@@ -18,7 +18,6 @@ $bib_error_file = "/home/dxp/bib-db/errorlog";
 $bib_bib2postgresql_dir = "/home/dxp/bib-db";
 
 // Default location for publication files (pdf, ps, etc.)
-//$bib_files_dir = "/export/htdocs/website/research/labs/modelling_and_analysis_of_systems/papers";
 $bib_files_dir = "/home/dxp/papers";
 $bib_files_url = "/papers";
 
