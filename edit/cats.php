@@ -9,11 +9,11 @@ $action = "";
 $action = extract_var_from_post_get("action");
 
 if ($action == "delete") {
+	$name = extract_var_from_post_get("name");
 	$sure = extract_var_from_post_get("sure");
 	if ($sure != "yes") {
 		echo "<p>Are you sure you want to delete category '$name'? [<a href=\"cats.php?action=delete&name=$name&sure=yes\">Yes</a>]</p>\n";
 	} else {
-		$name = extract_var_from_post_get("name");
 		if ($name) {
 			$name = pg_escape_string($name);
 			$changed = bib_db_update_query("DELETE from bib_cats WHERE name='".$name."'");
