@@ -24,18 +24,18 @@ public class Bib2Postgresql
 	public static void main(String args[])
 	{
 		if (args.length < 3 || args.length > 4) {
-			System.out.println("Usage: java Bib2Postgresql <db_host> <db_user> <db_name> <db_table>");
+			System.out.println("Usage: java Bib2Postgresql <db_host> <db_user> <db_name> <db_passwd> <db_table>");
 			return;
 		}
-		String table = (args.length > 3) ? args[3] : "bib_items";
+		String table = (args.length > 3) ? args[4] : "bib_items";
 		if (!table.matches("[A-Za-z0-9_]*")) {
 			System.out.println("Error: Invalid table name \""+table+"\"");
 			System.exit(1);
 		}
-		new Bib2Postgresql().run(args[0], args[1], args[2], table);
+		new Bib2Postgresql().run(args[0], args[1], args[2], args[3], table);
 	}
 	
-	public void run(String dbhost, String dbuser, String dbname, String dbtable)
+	public void run(String dbhost, String dbuser, String dbname, String dbpasswd, String dbtable)
 	{
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -51,7 +51,7 @@ public class Bib2Postgresql
 		// Connect to database
 		try {
 			Class.forName("org.postgresql.Driver");
-			conn = DriverManager.getConnection("jdbc:postgresql://"+dbhost+"/"+dbname, dbuser, "dxpbib");
+			conn = DriverManager.getConnection("jdbc:postgresql://"+dbhost+"/"+dbname, dbuser, dbpasswd);
 		} catch (ClassNotFoundException e) {
 			System.out.println("Error: Could not load database drivers.");
 			System.exit(1);
