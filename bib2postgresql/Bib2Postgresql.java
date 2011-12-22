@@ -23,7 +23,7 @@ public class Bib2Postgresql
 {
 	public static void main(String args[])
 	{
-		if (args.length < 3 || args.length > 4) {
+		if (args.length < 4 || args.length > 5) {
 			System.out.println("Usage: java Bib2Postgresql <db_host> <db_user> <db_name> <db_passwd> <db_table>");
 			return;
 		}
