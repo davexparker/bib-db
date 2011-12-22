@@ -1,6 +1,0 @@
-AuthUserFile /home/dxp/qav-www/wiki/.htpasswd
-AuthType Basic
-AuthName "Protected"
-<Limit GET POST>
-require valid-user
-</Limit>
