@@ -55,7 +55,7 @@ and make sure that the key in the bibtex file matches the one you provide below.
 		if (is_uploaded_file($_FILES['bibfile']['tmp_name'])) {
 			echo "<p>Attempting to add ".$_FILES['bibfile']['name']." to database...</p>\n";
 			echo "<pre>\n";
-			$res = exec("/home/dxp/bib-db/bib2postgresql/bib2postgresql < ".$_FILES['bibfile']['tmp_name']." 2>&1", $output);
+			$res = exec("$bib_bib2postgresql_dir/bib2postgresql/bib2postgresql < ".$_FILES['bibfile']['tmp_name']." 2>&1", $output);
 			if ($res == 0) echo "<font color=\"#cc0000\">";
 			else echo "<font color=\"#00cc00\">";
 			foreach ($output as $line) {
@@ -64,10 +64,10 @@ and make sure that the key in the bibtex file matches the one you provide below.
 			echo "</pre>\n";
 			echo "</font>\n";
 			if ($res != 0) {
-				if (!@move_uploaded_file($_FILES['bibfile']['tmp_name'], "/home/dxp/doc/bib/".$key.".bib")) {
+				if (!@move_uploaded_file($_FILES['bibfile']['tmp_name'], "$bib_bibtex_dir/".$key.".bib")) {
 					echo "<p>But there was en error uploading the actual bibtex file to the server.</p>\n";
 				} else {
-					exec("chmod 666 /home/dxp/doc/bib/".$key.".bib");
+					exec("chmod 666 $bib_bibtex_dir/".$key.".bib");
 				}
 				echo "<p>You can now <a href=\"edit.php?key=$key\">edit</a> the database entry.</p>";
 			}
