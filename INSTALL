@@ -22,6 +22,7 @@ Prerequisites
        create user dxp;
        \du
        create database dxp owner dxp;
+       alter user dxp with password 'topsecret';
        \l
        \q
 
