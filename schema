@@ -83,10 +83,18 @@ SET default_with_oids = false;
 --
 
 CREATE TABLE bib_cats (
-    name character varying(20),
+    name character varying(20) NOT NULL,
     cat_group character varying(20),
     description text
 );
+
+
+--
+-- Name: bib_cats_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY bib_cats
+    ADD CONSTRAINT bib_cats_pkey PRIMARY KEY (name);
 
 
 --
@@ -127,13 +135,13 @@ CREATE TABLE bib_types (
 COPY bib_types ("type", type_index, type_description) FROM stdin;
 book	1	Books
 inbook	2	Book chapters
-phdthesis	3	Theses
-mastersthesis	3	Theses
-article	4	Journal papers
-inproceedings	5	Conference papers
 techreport	6	Technical reports
 unpublished	7	Other
 proceedings	1	Books
+phdthesis	5	Theses
+mastersthesis	5	Theses
+inproceedings	4	Conference papers
+article	3	Journal papers
 \.
 
 

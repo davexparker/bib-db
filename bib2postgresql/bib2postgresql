@@ -1,6 +1,6 @@
 #!/bin/sh
 
-B2P_DIR=/Users/dxp/bib-db/bib2postgresql
+B2P_DIR=/home/dxp/bib-db/bib2postgresql
 B2P_DBHOST=qav
 B2P_USER=dxp
 B2P_DB=dxp
