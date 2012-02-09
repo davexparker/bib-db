@@ -17,7 +17,7 @@ Sort by:
 [<a href="<?php echo $_SERVER["PHP_SELF"]; ?>?search=<?php echo $search; ?>&sort=author">Author</a>]
 [<a href="<?php echo $_SERVER["PHP_SELF"]; ?>?search=<?php echo $search; ?>&sort=title">Title</a>]
 </p>
-<?
+<?php
 
 echo "<p></p>\n\n";
 
