@@ -344,12 +344,14 @@ function bib_build_search_info($search, $fields)
 			$clause = "key ~* '".pg_escape_string(preg_quote($word, "/"))."'";
 			foreach ($bib_item_fields as $field) {
 				if (in_array($field, $bib_list_search_fields)) {
-					if ($field != "month") {
-						$clause = $clause." OR $field ~* '".pg_escape_string(preg_quote($word, "/"))."'";
-					} else {
+					if ($field == "month") {
 						$months = array();
 						foreach ($bib_month_names as $i => $month) if (stristr($month, $word)) $months[] = "month=$i";
 						if ($months) $clause = $clause." OR ".implode(" OR ", $months);
+					} else if ($field == "year") {
+						$clause = $clause." OR CAST($field AS TEXT) ~* '".pg_escape_string(preg_quote($word, "/"))."'";
+					} else {
+						$clause = $clause." OR $field ~* '".pg_escape_string(preg_quote($word, "/"))."'";
 					}
 				}
 			}
