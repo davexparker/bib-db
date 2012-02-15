@@ -19,7 +19,7 @@ touch dump
 pg_dump -h localhost -t bib_items -c --no-owner $USER >> dump
 pg_dump -h localhost -t bib_cats -c --no-owner $USER >> dump
 pg_dump -h localhost -t bib_types -c --no-owner $USER >> dump
-
+pg_dump -h localhost -t prism_downloads -c --no-owner $USER >> dump
 
 ================================
 Restoring from a database backup
