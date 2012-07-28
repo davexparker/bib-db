@@ -16,11 +16,7 @@ Use this form to upload a bibtex file to
 </p>
 
 <p>
-Please use lowercase filename of conference/journal, e.g. "cav06", "fmsd07".
-</p>
-
-<p>
-Add a suffix to distinguish papers if necessary, e.g. "cav06symmetry".
+The name of the bibtex file on the server will be the same as its citation key, specified below.
 </p>
 
 <!-- The data encoding type, enctype, MUST be specified as below -->
@@ -30,10 +26,10 @@ Add a suffix to distinguish papers if necessary, e.g. "cav06symmetry".
     <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
     
 	<table>
-	<tr><td><b>Name (e.g. cav06.pdf): </b></td><td>
+	<tr><td><b>Citation key (e.g. KNP06a): </b></td><td>
 	<input type="text" size="20" name="name" value=""></td></tr>
 
-	<tr><td><b>PDF (or PS) file to upload: </b></td><td>
+	<tr><td><b>Bibtex file to upload: </b></td><td>
     <!-- Name of input element determines name in $_FILES array -->
     <input name="bibfile" type="file">
 	</td></tr>
