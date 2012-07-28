@@ -16,7 +16,7 @@ Use this form to upload a bibtex file to
 </p>
 
 <p>
-The name of the bibtex file on the server will be the same as its citation key, specified below.
+The name of the bibtex file on the server will be based on its citation key, specified below.
 </p>
 
 <!-- The data encoding type, enctype, MUST be specified as below -->
@@ -47,11 +47,11 @@ The name of the bibtex file on the server will be the same as its citation key, 
 	} else {
 		if (is_uploaded_file($_FILES['bibfile']['tmp_name'])) {
 			echo "<p>Attempting to upload ".$_FILES['bibfile']['name']." to server...</p>\n";
-			if (!move_uploaded_file($_FILES['bibfile']['tmp_name'], "$bib_files_dir/".$name)) {
+			if (!move_uploaded_file($_FILES['bibfile']['tmp_name'], "$bib_files_dir/".$name.".bib")) {
 				echo "<p><font color=\"#cc0000\">[Error: Could not upload file (error code ".$_FILES['bibfile']['error'].")]</font></p>\n";
 			}
 			else {
-				echo "<p>Upload successful. File is <a href=\"$bib_bibtex_url/$name\">here</a>.</p>";
+				echo "<p>Upload successful. File is <a href=\"$bib_bibtex_url/$name.bib\">here</a>.</p>";
 			}
 		}
 		else {
