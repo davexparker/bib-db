@@ -12,7 +12,7 @@ if (!array_key_exists("bibfile", $_FILES)) {
 
 <p>
 Use this form to upload a bibtex file to
-<a href="$bib_bibtex_url">this area</a> of the server.
+<a href="<?php echo "$bib_bibtex_url";?>/">this area</a> of the server.
 </p>
 
 <p>
