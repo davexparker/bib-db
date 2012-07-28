@@ -48,7 +48,7 @@ The name of the bibtex file on the server will be based on its citation key, spe
 		if (is_uploaded_file($_FILES['bibfile']['tmp_name'])) {
 			echo "<p>Attempting to upload ".$_FILES['bibfile']['name']." to server...</p>\n";
 			if (!move_uploaded_file($_FILES['bibfile']['tmp_name'], "$bib_bibtex_dir/".$name.".bib")) {
-				echo "<p><font color=\"#cc0000\">[Error: Could not upload file (error code ".$_FILES['bibfile']['error'].")]</font></p>\n";
+				echo "<p><font color=\"#cc0000\">[Error: Could not upload file $bib_bibtex_dir/".$name.".bib (error code ".$_FILES['bibfile']['error'].")]</font></p>\n";
 			}
 			else {
 				echo "<p>Upload successful. File is <a href=\"$bib_bibtex_url/$name.bib\">here</a>.</p>";
