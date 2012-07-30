@@ -241,7 +241,8 @@ default:
 
 <table>
 
-<tr><td colspan="2">For local publications, enter the name of the PDF/PS file (without the extension):</td></tr>
+<tr><td colspan="2">For local publications, enter the name of the PDF/PS file (without the extension):<br>
+Use e.g. <em>cav06</em> or <em>cav06symm</em> (for conferences), <em>fmsd-games</em> (for journals) or <em>RR-11-11</em> (for CS tech reports)</td></tr>
 <tr><td><b>Filename: </b></td><td><input type="text" size="100" name="filename" value="<?php echo $item["filename"]; ?>"></td></tr>
 <tr><td colspan="2">For other people's publications, enter the URL where it can be found:</td></tr>
 <tr><td><b>URL: </b></td><td><input type="text" size="100" name="url" value="<?php echo $item["url"]; ?>"></td></tr>
@@ -249,7 +250,8 @@ default:
 <tr><td>&nbsp;</td></tr>
 
 <tr><td valign="top"><b>Abstract: </b><br>(html)</td><td><textarea rows="10" cols="70" name="abstract"><?php echo $item["abstract"]; ?></textarea></td></tr>
-<tr><td valign="top"><b>Notes: </b><br>(html)</td><td><textarea rows="5" cols="70" name="links"><?php echo $item["links"]; ?></textarea></td></tr>
+<tr><td valign="top"><b>Notes: </b><br>(html)</td><td><textarea rows="5" cols="70" name="links"><?php echo $item["links"]; ?></textarea><br>
+Use e.g. "See [KNP06c]" to automatically get a link to another paper in the database.</td></tr>
 
 <tr><td>&nbsp;</td><td></td></tr>
 
