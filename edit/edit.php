@@ -249,7 +249,7 @@ default:
 <tr><td>&nbsp;</td></tr>
 
 <tr><td valign="top"><b>Abstract: </b><br>(html)</td><td><textarea rows="10" cols="70" name="abstract"><?php echo $item["abstract"]; ?></textarea></td></tr>
-<tr><td valign="top"><b>Links: </b><br>(html)</td><td><textarea rows="5" cols="70" name="links"><?php echo $item["links"]; ?></textarea></td></tr>
+<tr><td valign="top"><b>Notes: </b><br>(html)</td><td><textarea rows="5" cols="70" name="links"><?php echo $item["links"]; ?></textarea></td></tr>
 
 <tr><td>&nbsp;</td><td></td></tr>
 
