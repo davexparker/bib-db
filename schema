@@ -124,7 +124,7 @@ SET default_with_oids = false;
 CREATE TABLE bib_types (
     "type" character varying(20),
     type_index integer,
-    type_description character varying(20)
+    type_description character varying(30)
 );
 
 
