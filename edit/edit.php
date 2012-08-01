@@ -252,6 +252,7 @@ Use e.g. <em>cav06</em> or <em>cav06symm</em> (for conferences), <em>fmsd-games<
 <tr><td valign="top"><b>Abstract: </b><br>(html)</td><td><textarea rows="10" cols="70" name="abstract"><?php echo $item["abstract"]; ?></textarea></td></tr>
 <tr><td valign="top"><b>Notes: </b><br>(html)</td><td><textarea rows="5" cols="70" name="links"><?php echo $item["links"]; ?></textarea><br>
 Use e.g. "See [KNP06c]" to automatically get a link to another paper in the database.</td></tr>
+<tr><td valign="top"><b>Synopsis: </b></td><td><textarea rows="5" cols="70" name="synopsis"><?php echo $item["synopsis"]; ?></textarea><br>
 
 <tr><td>&nbsp;</td><td></td></tr>
 

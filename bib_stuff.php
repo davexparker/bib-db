@@ -17,7 +17,7 @@ require $bib_connect_file;
 $bib_month_names = array("0"=>"", "1"=>"January", "2"=>"February", "3"=>"March", "4"=>"April", "5"=>"May", "6"=>"June", "7"=>"July", "8"=>"August", "9"=>"September", "10"=>"October", "11"=>"November", "12"=>"December", "13"=>"");
 
 // Main database fields for bibliography items (excludes "key", "cats")
-$bib_item_fields = array("type", "address", "author", "booktitle", "chapter", "edition", "editor", "institution", "journal", "month", "note", "number", "organization", "pages", "publisher", "school", "series", "title", "type2", "volume", "year", "url", "filename", "abstract", "links");
+$bib_item_fields = array("type", "address", "author", "booktitle", "chapter", "edition", "editor", "institution", "journal", "month", "note", "number", "organization", "pages", "publisher", "school", "series", "title", "type2", "volume", "year", "url", "filename", "abstract", "links", "synopsis");
 
 // Bibliography item types (à la bibtex)
 $bib_item_types = array("inproceedings","article","book","inbook","phdthesis","mastersthesis","techreport","unpublished","proceedings");
@@ -688,6 +688,11 @@ function bib_display_item($item, $link = NULL, $indent = 0)
 			echo "\t\t[<a href=\"".preg_replace("/%k/", $item["key"], $link_url)."\">".$link_name."</a>]\n";
 		}
 		echo "\t</span>\n";
+	}
+	
+	// print synopsis
+	if ($item_hi["synopsis"]) {
+		echo "$tabs<span class=\"bib-synop\">[".$item_hi["synopsis"]."]</span>\n";
 	}
 }
 
