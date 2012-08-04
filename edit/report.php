@@ -8,21 +8,22 @@
 
 <?php
 bib_new_list();
-bib_add_sql("(bib_items.type != 'techreport') AND ((position('M. Kwiatkowska' in author)>0) AND ((position('|marta|' in cats)=0) OR (cats IS NULL)))");
-bib_add_sql("(bib_items.type != 'techreport') AND ((position('G. Norman' in author)>0) AND ((position('|gethin|' in cats)=0) OR (cats IS NULL)))");
+//bib_add_sql("(bib_items.type != 'techreport') AND ((position('M. Kwiatkowska' in author)>0) AND ((position('|marta|' in cats)=0) OR (cats IS NULL)))");
+//bib_add_sql("(bib_items.type != 'techreport') AND ((position('G. Norman' in author)>0) AND ((position('|gethin|' in cats)=0) OR (cats IS NULL)))");
 bib_add_sql("(bib_items.type != 'techreport') AND ((position('D. Parker' in author)>0) AND ((position('|dave|' in cats)=0) OR (cats IS NULL)))");
 bib_display_list_ul("view.php?key=%k");
 ?>
 
-<h3>Local papers with no 'filename' (or 'url'):</h3>
+<h3>Local papers with no 'filename':</h3>
 
 <?php
-// papers with some category (that is not 'prismbib')
-$sql = "length(cats)>0 AND (position('|prismbib|' in cats)=0)";
+// prism or dave
+$cats = array("prism", "dave");
+$sql = implode(" OR ", preg_replace("/.+/", "(position('|$0|' in cats)>0)", $cats));
 // and that are not conference proceedings, books or msc theses
 $sql = "(".$sql.") AND (bib_items.type != 'proceedings' AND bib_items.type != 'book' AND bib_items.type != 'mastersthesis')";
 // and with missing filename/url
-$sql = "(".$sql.") AND (filename IS NULL OR filename = '') AND (url IS NULL OR url = '')";
+$sql = "(".$sql.") AND (filename IS NULL OR filename = '')";
 bib_new_list();
 bib_add_sql($sql);
 bib_sort_by("year", "desc");
@@ -46,11 +47,12 @@ foreach ($items as $item) {
 echo "</ul>\n";
 ?>
 
-<h3>Marta/Gethin/Dave papers with no 'abstract':</h3>
+<h3>Local papers with no 'abstract':</h3>
 
 <?php
-$authors = array("marta", "gethin", "dave");
-$sql = implode(" OR ", preg_replace("/.+/", "(position('|$0|' in cats)>0)", $authors));
+// prism or dave
+$cats = array("prism", "dave");
+$sql = implode(" OR ", preg_replace("/.+/", "(position('|$0|' in cats)>0)", $cats));
 // and that are not conference proceedings, books
 $sql = "(".$sql.") AND (bib_items.type != 'proceedings' AND bib_items.type != 'book')";
 // with no abstract...
