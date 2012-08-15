@@ -1156,7 +1156,7 @@ function bib_display_list($link = "", $block_start = "", $block_end = "", $item_
 			$result = bib_db_query($query, $dbconn);
 			$count += $result[0];
 		}
-		echo "<div class\"biblist-count\"=><b>".$count."</b> publications:</div>\n";
+		echo "<div class=\"biblist-count\"=><b>".$count."</b> publications:</div>\n";
 	}
 	
 	// display each section
