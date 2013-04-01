@@ -22,6 +22,9 @@ $bib_item_fields = array("type", "address", "author", "booktitle", "chapter", "e
 // Bibliography item types (à la bibtex)
 $bib_item_types = array("inproceedings","article","book","inbook","phdthesis","mastersthesis","techreport","unpublished","proceedings");
 
+// Default database fields to use for searching
+$bib_list_search_fields_default = array("key", "address", "author", "booktitle", "chapter", "editor", "institution", "journal", "month", "note", "number", "organization", "pages", "publisher", "school", "series", "title", "type2", "volume", "year");
+
 // Storage for info about a bib item list
 $bib_list_item_link = "";
 $bib_list_item_start = "";
@@ -867,12 +870,13 @@ function bib_get_item_files($item, $bibtex = true)
 function bib_new_list($search = NULL, $fields = NULL)
 {
 	global $bib_list_sections;
+	global $bib_list_search_fields_default;
 	
 	$bib_list_sections = array();
 	bib_new_section();
 	
 	// if no list of search fields specified, use some sensible defaults
-	if ($fields == NULL) $fields = array("key", "address", "author", "booktitle", "chapter", "editor", "institution", "journal", "month", "note", "number", "organization", "pages", "publisher", "school", "series", "title", "type2", "volume", "year");
+	if ($fields == NULL) $fields = $bib_list_search_fields_default;
 	
 	// if search info provided, do some processing of it
 	if ($search != NULL) if ($search != "") bib_build_search_info($search, $fields);
@@ -1258,6 +1262,62 @@ function bib_display_sect_rec($dbconn, $sortby_list, $depth = 0, $where = "", $o
 			bib_display_sect_rec($dbconn, $sortby_list, $depth+1, $new_where, $orderby);
 		}
 	}
+}
+
+//-----------------------------------------------------------------------------
+
+// Get an array of all words in searchable fields in the current list
+// (optionally, only return those starting with $term)
+// (but ignore any list search info)
+
+function bib_get_all_searchable_words($term = NULL)
+{
+	global $bib_list_sections;
+	global $bib_list_search_fields_default;
+	
+	// connect to database
+	$dbconn = bib_connect_to_db();
+	if (!$dbconn) { bib_log_error("Couldn't connect to database"); return; }
+	
+	// extract all search fields from all items in the current list
+	$where = "true";
+	foreach ($bib_list_sections as $index => $section) {
+		$where = "(".$where.")AND(".$section["select"].")";
+	}
+	$res = bib_db_query("SELECT ".implode(",", $bib_list_search_fields_default)." FROM bib_items WHERE ".$where, $dbconn);
+
+	// go through all db fields returned, put into array
+	$words = array();
+	foreach($res as $entries) {
+		$n = count($entries);
+		for ($i = 0; array_key_exists($i, $entries); $i++) {
+			$entry = $entries[$i];
+			if ($entry && count($entry) > 0) {
+				foreach (explode(" ", $entry) as $word) {
+					// pick out those starting with $term and strip trailing punctuation
+					$regexp = "/^";
+					if ($term)
+						$regexp .= $term;
+					$regexp .= "[A-Za-z0-9\\-]+/i";
+					if (preg_match($regexp, $word, $matches)) {
+						$word = $matches[0];
+						// reject just numbers
+						if (preg_match("/[A-Za-z]/", $word)) {
+							// reject 1-letter words
+							if (strlen($word) > 1) {
+								$words[$word] = 1;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	// disconnect from database
+	bib_disconnect_db($dbconn);
+	
+	return array_keys($words);
 }
 
 //-----------------------------------------------------------------------------
