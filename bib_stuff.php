@@ -1007,7 +1007,7 @@ function bib_search_box()
 	echo "<div class=\"biblist-search-box\">\n";
 	echo "<form method=\"get\" action=\"".$_SERVER["PHP_SELF"]."\">\n";
 	echo "<input type=\"submit\" value=\"Search\">\n&nbsp;\n";
-	echo "<input type=\"text\" size=\"30\" name=\"search\" value=\"";
+	echo "<input class=\"bib-search-field\" type=\"text\" size=\"30\" name=\"search\" value=\"";
 	if ($search != NULL) echo htmlentities(trim($search), ENT_COMPAT, "UTF-8");
 	echo "\">\n</form>\n";
 	echo "</div>\n\n";
