@@ -23,7 +23,7 @@ $bib_item_fields = array("type", "address", "author", "booktitle", "chapter", "e
 $bib_item_types = array("inproceedings","article","book","inbook","phdthesis","mastersthesis","techreport","unpublished","proceedings");
 
 // Default database fields to use for searching
-$bib_list_search_fields_default = array("key", "address", "author", "booktitle", "chapter", "editor", "institution", "journal", "month", "note", "number", "organization", "pages", "publisher", "school", "series", "title", "type2", "volume", "year");
+$bib_list_search_fields_default = array("key", "address", "author", "booktitle", "chapter", "editor", "institution", "journal", "month", "note", "number", "organization", "pages", "publisher", "school", "series", "title", "type2", "volume", "year", "synopsis");
 
 // Storage for info about a bib item list
 $bib_list_item_link = "";
