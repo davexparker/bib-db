@@ -82,9 +82,9 @@ else {
 foreach ($bib_item_fields_bibtex as $field) {
 	if ($field == "type") {
 		echo "<tr><td><b>Type: </b></td><td><select name=\"type\">";
-		foreach ($bib_item_types as $type_index => $type_name) {
-			echo "<option value=\"$type_index\"";
-			if ($item["type"] == $type_index) echo " selected";
+		foreach ($bib_item_types as $type_name) {
+			echo "<option value=\"$type_name\"";
+			if ($item["type"] == $type_name) echo " selected";
 			echo ">$type_name";
 		}
 		echo "</select></td></tr>\n";
