@@ -686,6 +686,10 @@ function bib_display_item($item, $link = NULL, $indent = 0)
 		}
 		echo "$tabs</span>\n";
 	//}
+	// url
+	if ($item_hi["url"]) {
+		echo "$tabs<span class=\"bib-url\"><a href=\"".$item_hi["url"]."\">".$item_hi["url"]."</a></span>\n";
+	}
 	
 	// print any extra links requested
 	if ($bib_list_item_extra_links) {
