@@ -88,7 +88,7 @@ foreach ($bib_item_fields_bibtex as $field) {
 			echo ">$type_name";
 		}
 		echo "</select></td></tr>\n";
-	else if ($field == "month") {
+	} else if ($field == "month") {
 		echo "<tr><td><b>Month: </b></td><td><select name=\"month\">";
 		foreach ($bib_month_names as $month_index => $month_name) {
 			echo "<option value=\"$month_index\"";
