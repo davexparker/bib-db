@@ -19,6 +19,9 @@ $bib_month_names = array("0"=>"", "1"=>"January", "2"=>"February", "3"=>"March",
 // Main database fields for bibliography items (excludes "key", "cats")
 $bib_item_fields = array("type", "address", "author", "booktitle", "chapter", "edition", "editor", "institution", "journal", "month", "note", "number", "organization", "pages", "publisher", "school", "series", "title", "type2", "volume", "year", "url", "filename", "abstract", "links", "synopsis");
 
+// Subset of database fields (from $bib_item_fields above) that are standard bibtex fields
+$bib_item_fields_bibtex = array("type", "address", "author", "booktitle", "chapter", "edition", "editor", "institution", "journal", "month", "note", "number", "organization", "pages", "publisher", "school", "series", "title", "type2", "volume", "year");
+
 // Bibliography item types (à la bibtex)
 $bib_item_types = array("inproceedings","article","book","inbook","phdthesis","mastersthesis","techreport","unpublished","proceedings");
 
