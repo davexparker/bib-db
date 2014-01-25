@@ -280,7 +280,7 @@ function bib_build_sql_clause($args)
 	$clauses = array();
 	for ($i = $start; $i < $n; $i++) {
 		if ($field != "cat") {
-			$clauses []= "$field='".pg_escape_string($args[$i])."'";
+			$clauses []= "bib_items.$field='".pg_escape_string($args[$i])."'";
 		} else {
 			$clauses []= "position('|".pg_escape_string($args[$i])."|' in cats)>0";
 		}
