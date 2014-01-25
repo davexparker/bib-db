@@ -79,8 +79,26 @@ else {
 <tr><td>&nbsp;</td><td></td></tr>
 
 <?php
-foreach ($bib_item_fields as $field) {
-	echo "<tr><td><b>$field: </b></td><td><input type=\"text\" size=\"100\" name=\"$field\" value=\"".$item["$field"]."\"></td></tr>\n";
+foreach ($bib_item_fields_bibtex as $field) {
+	if ($field == "type") {
+		echo "<tr><td><b>Type: </b></td><td><select name=\"type\">";
+		foreach ($bib_item_types as $type_index => $type_name) {
+			echo "<option value=\"$type_index\"";
+			if ($item["type"] == $type_index) echo " selected";
+			echo ">$type_name";
+		}
+		echo "</select></td></tr>\n";
+	else if ($field == "month") {
+		echo "<tr><td><b>Month: </b></td><td><select name=\"month\">";
+		foreach ($bib_month_names as $month_index => $month_name) {
+			echo "<option value=\"$month_index\"";
+			if ($item["month"] == $month_index) echo " selected";
+			echo ">$month_name";
+		}
+		echo "</select></td></tr>\n";
+	} else {
+		echo "<tr><td><b>$field: </b></td><td><input type=\"text\" size=\"100\" name=\"$field\" value=\"".$item["$field"]."\"></td></tr>\n";
+	}	
 }
 ?>
 
