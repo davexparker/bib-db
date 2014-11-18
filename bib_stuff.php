@@ -588,7 +588,7 @@ function bib_display_item($item, $link = NULL, $indent = 0)
 		if ($item_hi["author"]) echo " ";
 		echo $item_hi["editor"]." (editor";
 		if (strstr($item_hi["editor"], " and ")) echo "s";
-		echo ")";
+		echo "),";
 	}
 	echo "</span>\n";
 	// title
