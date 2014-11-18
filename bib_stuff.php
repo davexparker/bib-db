@@ -608,7 +608,7 @@ function bib_display_item($item, $link = NULL, $indent = 0)
 		if ($item_hi["editor"]) {
 			$src .= $item_hi["editor"]." (editor";
 			if (strstr($item_hi["editor"], " and ")) $src .= "s";
-			$src .= ") ";
+			$src .= "), ";
 		}
 		$src .= "<em>".$item_hi["booktitle"]."</em>";
 		if ($item_hi["volume"] && $item_hi["series"]) $src .= ", volume ".$item_hi["volume"]." of ".$item_hi["series"];
@@ -639,7 +639,7 @@ function bib_display_item($item, $link = NULL, $indent = 0)
 		if ($item_hi["editor"]) {
 			$src .= $item_hi["editor"]." (editor";
 			if (strstr($item_hi["editor"], " and ")) $src .= "s";
-			$src .= ") ";
+			$src .= "), ";
 		}
 		$src .= "<em>".$item_hi["title"]."</em>";
 		if ($item_hi["volume"] && $item_hi["series"]) $src .= ", volume ".$item_hi["volume"]." of ".$item_hi["series"];
