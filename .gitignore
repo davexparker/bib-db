@@ -1,0 +1,5 @@
+config.php
+connect.php
+dump*
+schema-bak
+errorlog
