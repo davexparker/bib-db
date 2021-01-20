@@ -1300,7 +1300,8 @@ function bib_get_all_searchable_words($term = NULL)
 		for ($i = 0; array_key_exists($i, $entries); $i++) {
 			$entry = $entries[$i];
 			if ($entry && strlen($entry) > 0) {
-				foreach (explode(" ", $entry) as $word) {
+				//foreach (explode(" ", $entry) as $word) {
+				foreach (preg_split("/[\s,\\-]+/", $entry) as $word) {
 					// pick out those starting with $term and strip trailing punctuation
 					$regexp = "/^";
 					if ($term)
