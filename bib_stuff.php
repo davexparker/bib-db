@@ -1299,13 +1299,13 @@ function bib_get_all_searchable_words($term = NULL)
 		$n = count($entries);
 		for ($i = 0; array_key_exists($i, $entries); $i++) {
 			$entry = $entries[$i];
-			if ($entry && count($entry) > 0) {
+			if ($entry && strlen($entry) > 0) {
 				foreach (explode(" ", $entry) as $word) {
 					// pick out those starting with $term and strip trailing punctuation
 					$regexp = "/^";
 					if ($term)
 						$regexp .= $term;
-					$regexp .= "[A-Za-z0-9\\-]+/i";
+					$regexp .= "[A-Za-z0-9\\-]*/i";
 					if (preg_match($regexp, $word, $matches)) {
 						$word = $matches[0];
 						// reject just numbers
