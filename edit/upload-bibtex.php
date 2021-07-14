@@ -23,7 +23,7 @@ The name of the bibtex file on the server will be based on its citation key, spe
 <form enctype="multipart/form-data" action="upload-bibtex.php" method="POST">
 
     <!-- MAX_FILE_SIZE must precede the file input field -->
-    <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
+    <input type="hidden" name="MAX_FILE_SIZE" value="50000000">
     
 	<table>
 	<tr><td><b>Citation key (e.g. KNP06a): </b></td><td>

@@ -30,7 +30,7 @@ Add a suffix to distinguish papers if necessary, e.g. "cav06symmetry".
 <form enctype="multipart/form-data" action="upload-paper.php" method="POST">
 
     <!-- MAX_FILE_SIZE must precede the file input field -->
-    <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
+    <input type="hidden" name="MAX_FILE_SIZE" value="50000000">
     
 	<table>
 	<tr><td><b>Name (e.g. cav06.pdf): </b></td><td>

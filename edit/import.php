@@ -30,7 +30,7 @@ and make sure that the key in the bibtex file matches the one you provide below.
 <form enctype="multipart/form-data" action="import.php" method="POST">
 
     <!-- MAX_FILE_SIZE must precede the file input field -->
-    <input type="hidden" name="MAX_FILE_SIZE" value="30000">
+    <input type="hidden" name="MAX_FILE_SIZE" value="50000000">
     
 	<table>
 	<tr><td><b>Key (e.g. KNP09a): </b></td><td>
