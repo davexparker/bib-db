@@ -758,7 +758,7 @@ function bib_display_item_detailed($item, $link = NULL, $indent = 0)
 	$notes = array();
 	if (array_key_exists("links", $item)) if ($item["links"]) {
 		// replace citations of form [] with links
-		$thispage = $_SERVER["PHP_SELF"];
+		$thispage = htmlspecialchars($_SERVER["PHP_SELF"]);
 		$item["links"] = preg_replace("/\[([A-Za-z0-9_\-+]+)\]/", "[<a href=\"$thispage?key=\\1\">\\1</a>]", $item["links"]);
 		$notes[] = $item["links"];
 	}
@@ -785,7 +785,7 @@ function bib_display_item_detailed($item, $link = NULL, $indent = 0)
 		echo "\n<tr class=\"bibbox-row-alt".($table_alt = 3 - $table_alt)."\">\n<td class=\"bibbox-td\">\n";
 		echo "<div class=\"bibbox-links\">\n";
 		// replace citations of form [] with links
-		$thispage = $_SERVER["PHP_SELF"];
+		$thispage = htmlspecialchars($_SERVER["PHP_SELF"]);
 		$item["links"] = preg_replace("/\[([A-Za-z0-9_\-+]+)\]/", "[<a href=\"$thispage?key=\\1\">\\1</a>]", $item["links"]);
 		echo $item["links"]."\n";
 		echo "</div>";
@@ -1016,7 +1016,7 @@ function bib_search_box()
 	
 	// display search box
 	echo "<div class=\"biblist-search-box\">\n";
-	echo "<form method=\"get\" action=\"".$_SERVER["PHP_SELF"]."\">\n";
+	echo "<form method=\"get\" action=\"".htmlspecialchars($_SERVER["PHP_SELF"])."\">\n";
 	echo "<input type=\"submit\" value=\"Search\">\n&nbsp;\n";
 	echo "<input class=\"bib-search-field\" type=\"text\" size=\"30\" name=\"search\" value=\"";
 	if ($search != NULL) echo htmlentities(trim($search), ENT_COMPAT, "UTF-8");
@@ -1048,7 +1048,7 @@ function bib_sort_links($search = "", $extra = NULL, $default = "date")
 	foreach ($sort_list as $sort_type) {
 		if ($first) $first = false; else echo ", ";
 		if ($sort_type == $sort) echo "<span class=\"bib-highlight\">";
-		echo "<a href=\"".$_SERVER["PHP_SELF"]."?";
+		echo "<a href=\"".htmlspecialchars($_SERVER["PHP_SELF"])."?";
 		if ($search) echo "search=".htmlentities($search)+"&amp;";
 		echo "sort=$sort_type\">$sort_type</a>";
 		if ($sort_type == $sort) echo "</span>";
