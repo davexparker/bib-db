@@ -1049,7 +1049,7 @@ function bib_sort_links($search = "", $extra = NULL, $default = "date")
 		if ($first) $first = false; else echo ", ";
 		if ($sort_type == $sort) echo "<span class=\"bib-highlight\">";
 		echo "<a href=\"".htmlspecialchars($_SERVER["PHP_SELF"])."?";
-		if ($search) echo "search=".htmlentities($search)+"&amp;";
+		if ($search) echo "search=".htmlentities($search)."&amp;";
 		echo "sort=$sort_type\">$sort_type</a>";
 		if ($sort_type == $sort) echo "</span>";
 	}
