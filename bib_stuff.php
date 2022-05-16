@@ -763,7 +763,9 @@ function bib_display_item_detailed($item, $link = NULL, $indent = 0)
 		$notes[] = $item["links"];
 	}
 	if (array_key_exists("publisher", $item)) if (substr_count($item["publisher"], "Springer")) {
-		$notes[] = "The original publication is available at <a href=\"https://link.springer.com/\">link.springer.com</a>.";
+		$title = ($item["type"] != "inbook") ? $item["title"] : $item["chapter"];
+		$url = "https://link.springer.com/search?query=".rawurlencode($title);
+		$notes[] = "The original publication is available at <a href=\"".$url."\">link.springer.com</a>.";
 	}
 	if ((array_key_exists("series", $item) && (strcasecmp($item["series"], "Electronic Notes in Theoretical Computer Science") === 0 || strcasecmp($item["series"], "ENTCS") === 0))
 	    || (array_key_exists("journal", $item) && (strcasecmp($item["journal"], "Electronic Notes in Theoretical Computer Science") === 0 || strcasecmp($item["journal"], "ENTCS") === 0))) {
